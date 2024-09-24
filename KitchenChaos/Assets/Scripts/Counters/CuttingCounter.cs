@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CuttingCounter : BaseCounter {
+public class CuttingCounter : BaseCounter, IProgressBar {
     [SerializeField] private CuttingRecipeSO[] cuttingKitchenObjectsArray;
     public event EventHandler OnCut;
     public event EventHandler<IProgressBar.OnProgressChangedEventArgs> OnProgressChanged;
