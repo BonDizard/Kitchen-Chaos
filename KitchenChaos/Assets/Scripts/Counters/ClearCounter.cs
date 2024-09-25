@@ -1,16 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.UIElements;
-
+/*
+ * Author: Bharath Kumar S
+ * Date: 25-09-2024
+ * clear counter (placing and picking objects)
+ */
 public class ClearCounter : BaseCounter {
     public override void Interact(Player player) {
+        //if there is onject player pickup
         if (HasKitchenObject()) {
             //the counter has some object
             if (!player.HasKitchenObject()) {
                 //the player not have anything
-                GetKitchenObject().SetClearIKitchenObjectParent(player);
+                GetKitchenObject().SetKitchenObjectToParent(player);
             }
             else {
                 //the player is having something
@@ -20,7 +20,7 @@ public class ClearCounter : BaseCounter {
             //the counter is empty
             if (player.HasKitchenObject()) {
                 //player has an object
-                player.GetKitchenObject().SetClearIKitchenObjectParent(this);
+                player.GetKitchenObject().SetKitchenObjectToParent(this);
             }
             else {
                 //the player is not having an object

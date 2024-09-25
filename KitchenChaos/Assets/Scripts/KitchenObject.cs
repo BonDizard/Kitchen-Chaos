@@ -16,7 +16,7 @@ public class KitchenObject : MonoBehaviour {
     }
 
     // Sets the parent object for this kitchen object and clears the old parent, if any.
-    public void SetClearIKitchenObjectParent(IKitchenObjectParent kitchenObjectParent) {
+    public void SetKitchenObjectToParent(IKitchenObjectParent kitchenObjectParent) {
         // If there is already a parent, clear the current kitchen object reference in the parent.
         if (this.kitchenObjectParent != null) {
             this.kitchenObjectParent.ClearKitchenObject();
@@ -58,7 +58,7 @@ public class KitchenObject : MonoBehaviour {
         KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
 
         // Set the new kitchen object to its parent.
-        kitchenObject.SetClearIKitchenObjectParent(kitchenObjectParent);
+        kitchenObject.SetKitchenObjectToParent(kitchenObjectParent);
 
         // Return the created kitchen object.
         return kitchenObject;

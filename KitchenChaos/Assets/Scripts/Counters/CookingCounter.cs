@@ -129,6 +129,9 @@ public class CookingCounter : BaseCounter, IProgressBar {
                 OnStateChange?.Invoke(this, new OnStateChangeEventArgs {
                     state = state
                 });
+                OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs {
+                    progressNormalized = 0f
+                });
             }
             else {
                 // The player is holding something

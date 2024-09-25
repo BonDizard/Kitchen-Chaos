@@ -1,8 +1,10 @@
+/*
+ * Author: Bharath Kumar S
+ * Date: 25-09-2024
+ * Container logic (spawining ingridents)
+ */
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class ContainerCounter : BaseCounter, IKitchenObjectParent {
     [SerializeField] private KitchenObjectsSO kitchenScriptableObject;
