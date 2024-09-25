@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu()]
 public class CookingRecipeSO : ScriptableObject {
     public KitchenObjectsSO inputKitchenObject;
     public KitchenObjectsSO outputKitchenObject;

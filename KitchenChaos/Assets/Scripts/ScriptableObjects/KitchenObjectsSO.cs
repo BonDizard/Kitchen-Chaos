@@ -1,6 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+/*
+ * Author: Bharath Kumar S
+ * Date: 25-09-2024
+ * Scriptable Object for Kitchen Objects(Ingridents)
+ */
 using UnityEngine;
 
 [CreateAssetMenu()]

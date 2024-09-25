@@ -1,5 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+/*
+ * Author: Bharath Kumar S
+ * Date: 25-09-2024
+ * Description: proggress bar l
+ */
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +12,7 @@ public class ProgressBarUI : MonoBehaviour {
     private IProgressBar hasProgress;
     private void Start() {
         hasProgress = hasProgressGameObject.GetComponent<IProgressBar>();
+
         if (hasProgress == null) {
             Debug.LogError("Game Object " + hasProgressGameObject + " Does not have the IProgressBar");
         }
