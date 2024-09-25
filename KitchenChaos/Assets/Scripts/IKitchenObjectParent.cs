@@ -1,5 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+/*
+ * Author: Bharath Kumar S
+ * Date: 25-09-2024
+ * Description: Parent of the kitchen object(counters on which incridents are there) 
+ */
+
 using UnityEngine;
 
 public interface IKitchenObjectParent {
