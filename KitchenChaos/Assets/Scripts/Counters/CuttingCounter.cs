@@ -1,8 +1,10 @@
+/*
+ * Author: Bharath Kumar S
+ * Date: 25-09-2024
+ * Cutting counter logic
+ */
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class CuttingCounter : BaseCounter, IProgressBar {
     [SerializeField] private CuttingRecipeSO[] cuttingKitchenObjectsArray;
@@ -11,11 +13,12 @@ public class CuttingCounter : BaseCounter, IProgressBar {
 
     private int cuttingProgress;
     public override void Interact(Player player) {
+        //if there is onject player pickup
         if (HasKitchenObject()) {
             //the counter has some object
             if (!player.HasKitchenObject()) {
                 //the player not have anything
-                GetKitchenObject().SetClearIKitchenObjectParent(player);
+                GetKitchenObject().SetKitchenObjectToParent(player);
             }
             else {
                 //the player is having something
@@ -27,10 +30,10 @@ public class CuttingCounter : BaseCounter, IProgressBar {
                 //player has an object
                 if (IsTheObjectCuttable(player.GetKitchenObject().GetKitchenObjectSO())) {
                     //player is having object which is cuttable
-                    player.GetKitchenObject().SetClearIKitchenObjectParent(this);
-                    CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOFromInput(GetKitchenObject().GetKitchenObjectSO());
-
+                    player.GetKitchenObject().SetKitchenObjectToParent(this);
                     cuttingProgress = 0;
+
+                    CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOFromInput(GetKitchenObject().GetKitchenObjectSO());
 
                     OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs {
                         progressNormalized = (float)cuttingProgress / cuttingRecipeSO.maxCutRequiredForObject
@@ -45,7 +48,7 @@ public class CuttingCounter : BaseCounter, IProgressBar {
 
     public override void InteractAlternate(Player player) {
         if (HasKitchenObject() && IsTheObjectCuttable(GetKitchenObject().GetKitchenObjectSO())) {
-
+            //ther is kitchen object and alternate key is pressed then cut the object
             cuttingProgress++;
 
             CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOFromInput(GetKitchenObject().GetKitchenObjectSO());
@@ -61,7 +64,6 @@ public class CuttingCounter : BaseCounter, IProgressBar {
                 //object present
                 GetKitchenObject().DestroySelf();
                 KitchenObject.SpawnKitchenObect(outputKitchenObjectSO, this);
-
             }
         }
     }
@@ -86,6 +88,5 @@ public class CuttingCounter : BaseCounter, IProgressBar {
             }
         }
         return null;
-
     }
 }
