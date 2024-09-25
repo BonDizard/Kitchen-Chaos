@@ -49,6 +49,17 @@ public class KitchenObject : MonoBehaviour {
         Destroy(gameObject); // Destroy the game object in the scene.
     }
 
+    public bool TryGetPlate(out PlateKitchenObject plateKitchenObject) {
+
+        if (this is PlateKitchenObject) {
+            plateKitchenObject = this as PlateKitchenObject;
+            return true;
+        }
+        else {
+            plateKitchenObject = null;
+            return false;
+        }
+    }
     // Static method to spawn a new kitchen object based on a provided KitchenObjectsSO and assign it to a parent.
     public static KitchenObject SpawnKitchenObect(KitchenObjectsSO kitchenObjectsSO, IKitchenObjectParent kitchenObjectParent) {
         // Instantiate the prefab from the KitchenObjectsSO.

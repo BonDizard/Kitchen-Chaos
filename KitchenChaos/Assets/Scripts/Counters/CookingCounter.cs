@@ -135,6 +135,22 @@ public class CookingCounter : BaseCounter, IProgressBar {
             }
             else {
                 // The player is holding something
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) {
+                    if (plateKitchenObject.TryAddIngredients(GetKitchenObject().GetKitchenObjectSO())) {
+                        GetKitchenObject().DestroySelf();
+
+                        state = State.Idle;
+
+                        OnStateChange?.Invoke(this, new OnStateChangeEventArgs {
+                            state = state
+                        });
+                        OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs {
+                            progressNormalized = 0f
+                        });
+
+                    }
+
+                }
             }
         }
         else {

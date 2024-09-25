@@ -1,7 +1,7 @@
 /*
  * Author: Bharath Kumar S
  * Date: 25-09-2024
- * clear counter (placing and picking objects)
+ * Description: clear counter (placing and picking objects)
  */
 public class ClearCounter : BaseCounter {
     public override void Interact(Player player) {
@@ -14,12 +14,29 @@ public class ClearCounter : BaseCounter {
             }
             else {
                 //the player is having something
+                if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) {
+                    //player is holding a plate
+                    //add the ingrident to the plate and then delete in the clear counter
+                    if (plateKitchenObject.TryAddIngredients(GetKitchenObject().GetKitchenObjectSO())) {
+                        GetKitchenObject().DestroySelf();
+                    }
+                }
+                else {
+                    //player dont have plate something else he carring
+                    if (GetKitchenObject().TryGetPlate(out plateKitchenObject)) {
+                        //counter has a plate
+                        if (plateKitchenObject.TryAddIngredients(player.GetKitchenObject().GetKitchenObjectSO())) {
+                            player.GetKitchenObject().DestroySelf();
+                        }
+                    }
+                }
+
             }
         }
         else {
             //the counter is empty
             if (player.HasKitchenObject()) {
-                //player has an object
+                //player has an object 
                 player.GetKitchenObject().SetKitchenObjectToParent(this);
             }
             else {
