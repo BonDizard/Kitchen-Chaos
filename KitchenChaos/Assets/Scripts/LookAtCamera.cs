@@ -1,4 +1,8 @@
-
+/*
+ * Author: Bharath Kumar S
+ * Date: 25-09-2024
+ * Description: this helps game object look at the camera 
+ */
 using UnityEngine;
 
 public class LookAtCamera : MonoBehaviour {
