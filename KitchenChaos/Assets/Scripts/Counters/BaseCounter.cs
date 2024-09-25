@@ -9,10 +9,10 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent {
 
     //virtual means the clid classes can implement this same method we can also use abstract also
     //protected key word means its like private bet the child class also can use it
-    public virtual void Interact(PlayerScript player) {
+    public virtual void Interact(Player player) {
         Debug.LogError("BaseCounter Interact");
     }
-    public virtual void InteractAlternate(PlayerScript player) {
+    public virtual void InteractAlternate(Player player) {
         Debug.LogError("BaseCounter InteractAlternate");
 
     }

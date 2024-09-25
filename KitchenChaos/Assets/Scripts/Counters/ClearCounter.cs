@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 public class ClearCounter : BaseCounter {
-    public override void Interact(PlayerScript player) {
+    public override void Interact(Player player) {
         if (HasKitchenObject()) {
             //the counter has some object
             if (!player.HasKitchenObject()) {

@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class ContainerCounter : BaseCounter, IKitchenObjectParent {
     [SerializeField] private KitchenObjectsSO kitchenScriptableObject;
     public EventHandler OnPlayerGrabedAnObject;
-    public override void Interact(PlayerScript player) {
+    public override void Interact(Player player) {
         if (!player.HasKitchenObject()) {
             //player dont have anything
             KitchenObject.SpawnKitchenObect(kitchenScriptableObject, player);

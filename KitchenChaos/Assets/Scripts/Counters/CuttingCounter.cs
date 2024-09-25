@@ -10,7 +10,7 @@ public class CuttingCounter : BaseCounter, IProgressBar {
     public event EventHandler<IProgressBar.OnProgressChangedEventArgs> OnProgressChanged;
 
     private int cuttingProgress;
-    public override void Interact(PlayerScript player) {
+    public override void Interact(Player player) {
         if (HasKitchenObject()) {
             //the counter has some object
             if (!player.HasKitchenObject()) {
@@ -43,7 +43,7 @@ public class CuttingCounter : BaseCounter, IProgressBar {
         }
     }
 
-    public override void InteractAlternate(PlayerScript player) {
+    public override void InteractAlternate(Player player) {
         if (HasKitchenObject() && IsTheObjectCuttable(GetKitchenObject().GetKitchenObjectSO())) {
 
             cuttingProgress++;

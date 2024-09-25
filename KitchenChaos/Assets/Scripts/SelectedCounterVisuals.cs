@@ -1,25 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
+/*
+ * Author: Bharath Kumar S
+ * Date: 25-09-2024
+ * Description: Changing the counter visuals when the player is in front of it.
+ */
 using UnityEngine;
 
 public class SelectedCounterVisuals : MonoBehaviour {
-
     [SerializeField] private BaseCounter baseCounter;
     [SerializeField] private GameObject[] visualGameObjectArray;
 
     private void Start() {
-        PlayerScript.Instance.onSelectedCounterChange += Player_OnSelectedCounterChange;
+        // Subscribe to the event (listening) and trigger Player_OnSelectedCounterChange when the event is fired
+        Player.Instance.onSelectedCounterChange += Player_OnSelectedCounterChange;
     }
-    private void Player_OnSelectedCounterChange(object sender, PlayerScript.onSelectedCounterChangeEventArgs e) {
+
+    private void Player_OnSelectedCounterChange(object sender, Player.onSelectedCounterChangeEventArgs e) {
         if (e.selectedCounter == baseCounter) {
             Show();
         }
         else {
             Hide();
         }
-
     }
-
 
     private void Show() {
         foreach (GameObject visualGameObject in visualGameObjectArray) {

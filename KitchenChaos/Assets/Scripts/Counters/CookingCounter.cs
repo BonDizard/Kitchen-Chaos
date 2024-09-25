@@ -111,7 +111,7 @@ public class CookingCounter : BaseCounter, IProgressBar {
         }
     }
 
-    public override void Interact(PlayerScript player) {
+    public override void Interact(Player player) {
         if (HasKitchenObject()) {
             // The counter has some object
             if (!player.HasKitchenObject()) {
