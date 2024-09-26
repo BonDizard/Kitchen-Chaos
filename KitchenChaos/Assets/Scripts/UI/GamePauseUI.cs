@@ -10,12 +10,17 @@ using UnityEngine.UI;
 public class GamePauseUI : MonoBehaviour {
     [SerializeField] private Button menuButton;
     [SerializeField] private Button resumeButton;
+    [SerializeField] private Button optionsButton;
+
     private void Awake() {
         menuButton.onClick.AddListener(() => {
             Loader.Load(Loader.Scene.MenuScene);
         });
         resumeButton.onClick.AddListener(() => {
             KitchenGameManger.Instance.TogglePauseGame();
+        });
+        optionsButton.onClick.AddListener(() => {
+            OptionsUI.Instance.Show();
         });
     }
     private void Start() {
