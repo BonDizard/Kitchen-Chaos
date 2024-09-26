@@ -39,7 +39,7 @@ public class DeliverManager : MonoBehaviour {
                 OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
             else {
-                Debug.Log("Max waiting orders reached: " + maxWaitingOrders);
+                // Debug.Log("Max waiting orders reached: " + maxWaitingOrders);
             }
         }
     }

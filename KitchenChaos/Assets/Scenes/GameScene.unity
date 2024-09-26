@@ -3594,7 +3594,7 @@ GameObject:
   - component: {fileID: 1428620825}
   - component: {fileID: 1428620824}
   m_Layer: 5
-  m_Name: Clock
+  m_Name: TimerImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4755,6 +4755,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35732cc7976ddce43bb3ad266167e536, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timerImage: {fileID: 1428620826}
 --- !u!1 &1855786185
 GameObject:
   m_ObjectHideFlags: 0
