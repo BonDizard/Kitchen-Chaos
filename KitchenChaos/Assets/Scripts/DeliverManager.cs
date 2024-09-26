@@ -18,7 +18,6 @@ public class DeliverManager : MonoBehaviour {
     private int maxWaitingOrders = 4;
 
     private void Awake() {
-        Debug.Log("DeliverManager Awake - Initializing Instance and Waiting Recipe List");
         Instance = this;
         waitingRecipeSOList = new List<RecipeSO>();
     }
@@ -28,12 +27,12 @@ public class DeliverManager : MonoBehaviour {
 
         if (spawnTimer <= 0f) {
             spawnTimer = spawnTimerMax;
-            Debug.Log("DeliverManager Update - Spawn Timer Reset: " + spawnTimerMax);
+            // Debug.Log("DeliverManager Update - Spawn Timer Reset: " + spawnTimerMax);
 
             if (waitingRecipeSOList.Count < maxWaitingOrders) {
                 RecipeSO waitingRecipeSO = menu.recipeList[UnityEngine.Random.Range(0, menu.recipeList.Count)];
                 waitingRecipeSOList.Add(waitingRecipeSO);
-                Debug.Log("Recipe Spawned: " + waitingRecipeSO.name + " | Total Waiting Recipes: " + waitingRecipeSOList.Count);
+                // Debug.Log("Recipe Spawned: " + waitingRecipeSO.name + " | Total Waiting Recipes: " + waitingRecipeSOList.Count);
                 OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
             else {
@@ -43,48 +42,68 @@ public class DeliverManager : MonoBehaviour {
     }
 
     public void DeliveryRecipe(PlateKitchenObject plateKitchenObject) {
-        Debug.Log("DeliveryRecipe Called");
+        // Debug.Log("Attempting to deliver a recipe...");
+
+        // Loop through each waiting recipe
         for (int i = 0; i < waitingRecipeSOList.Count; i++) {
             RecipeSO waitingRecipe = waitingRecipeSOList[i];
-            Debug.Log("Checking Recipe: " + waitingRecipe.name);
+            // Debug.Log("Checking waiting recipe: " + waitingRecipe.name);
 
-            if (plateKitchenObject.GetKitchenObjectsSOList().Count == waitingRecipe.recipeList.Count) {
+            // Check if ingredient count matches between the plate and the recipe
+            int plateIngredientCount = plateKitchenObject.GetKitchenObjectsSOList().Count;
+            int recipeIngredientCount = waitingRecipe.recipeList.Count;
+            // Debug.Log("Plate ingredient count: " + plateIngredientCount + ", Recipe ingredient count: " + recipeIngredientCount);
+
+            if (plateIngredientCount == recipeIngredientCount) {
                 bool orderMatch = true;
 
+                // Loop through each ingredient in the plate
                 foreach (KitchenObjectsSO plateKitchenObjectsSO in plateKitchenObject.GetKitchenObjectsSOList()) {
+                    // Debug.Log("Checking plate ingredient: " + plateKitchenObjectsSO.name);
+
                     bool ingredientFound = false;
+
+                    // Loop through each ingredient in the waiting recipe
                     foreach (KitchenObjectsSO recipeKitchenObjectsSO in waitingRecipe.recipeList) {
-                        if (plateKitchenObject == recipeKitchenObjectsSO) {
+                        // Debug.Log("Comparing with recipe ingredient: " + recipeKitchenObjectsSO.name);
+
+                        // Check if ingredients match
+                        if (plateKitchenObjectsSO == recipeKitchenObjectsSO) {
                             ingredientFound = true;
-                            Debug.Log("Ingredient matched: " + plateKitchenObjectsSO.name);
+                            // Debug.Log("Ingredient match found: " + plateKitchenObjectsSO.name);
                             break;
                         }
                     }
+
                     if (!ingredientFound) {
+                        // Debug.LogWarning("Ingredient not found in recipe: " + plateKitchenObjectsSO.name);
                         orderMatch = false;
-                        Debug.Log("Ingredient not matched: " + plateKitchenObjectsSO.name);
                         break;
                     }
                 }
 
+                // If all ingredients matched, complete the order
                 if (orderMatch) {
-                    Debug.Log("Correct recipe delivered: " + waitingRecipe.name);
+                    // Debug.Log("Correct recipe delivered: " + waitingRecipe.name);
                     waitingRecipeSOList.RemoveAt(i);
                     OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
                     return;
                 }
                 else {
-                    Debug.Log("Recipe not matched.");
+                    Debug.LogWarning("Recipe did not match: " + waitingRecipe.name);
                 }
             }
             else {
-                Debug.Log("Recipe ingredient count mismatch.");
+                Debug.LogWarning("Ingredient count mismatch for recipe: " + waitingRecipe.name);
             }
         }
+
+        Debug.LogWarning("No matching recipe found for the plate.");
     }
 
+
     public List<RecipeSO> GetWaitingRecipeSOList() {
-        Debug.Log("GetWaitingRecipeSOList called - Current waiting recipe count: " + waitingRecipeSOList.Count);
+        // Debug.Log("GetWaitingRecipeSOList called - Current waiting recipe count: " + waitingRecipeSOList.Count);
         return waitingRecipeSOList;
     }
 }

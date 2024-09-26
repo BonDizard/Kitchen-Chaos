@@ -54,9 +54,9 @@ public class CookingCounter : BaseCounter, IProgressBar {
                                 GetKitchenObject().DestroySelf();
 
                                 KitchenObject.SpawnKitchenObect(cookingRecipeSO.outputKitchenObject, this);
-                                Debug.Log("Spawned: " + cookingRecipeSO.outputKitchenObject);
-                                Debug.Log("GetKitchenObject(): " + GetKitchenObject());
-                                Debug.Log("GetKitchenObject().GetKitchenObjectSO(): " + GetKitchenObject().GetKitchenObjectSO());
+                                // Debug.Log("Spawned: " + cookingRecipeSO.outputKitchenObject);
+                                // Debug.Log("GetKitchenObject(): " + GetKitchenObject());
+                                // Debug.Log("GetKitchenObject().GetKitchenObjectSO(): " + GetKitchenObject().GetKitchenObjectSO());
 
                                 state = State.Fried;
                                 burningTimer = 0f;
@@ -114,7 +114,7 @@ public class CookingCounter : BaseCounter, IProgressBar {
                     // Do nothing when burnt
                     break;
             }
-            Debug.Log(fryingTimer);
+            //Debug.Log(fryingTimer);
         }
     }
 
@@ -211,8 +211,8 @@ public class CookingCounter : BaseCounter, IProgressBar {
     private BurningRecipeSO GetBurningRecipeSOFromInput(KitchenObjectsSO inputKitchenObjectsSO) {
         foreach (BurningRecipeSO burningRecipeSO in burningRecipesArray) {
 
-            Debug.Log("inputKitchenObjectsSO: " + inputKitchenObjectsSO.name);
-            Debug.Log("burningRecipeSO: " + burningRecipeSO.inputKitchenObject.name);
+            // Debug.Log("inputKitchenObjectsSO: " + inputKitchenObjectsSO.name);
+            // Debug.Log("burningRecipeSO: " + burningRecipeSO.inputKitchenObject.name);
             if (burningRecipeSO.inputKitchenObject == inputKitchenObjectsSO) {
                 return burningRecipeSO;
             }
