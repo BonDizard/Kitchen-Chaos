@@ -6,8 +6,19 @@
 
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameInput : MonoBehaviour {
+    const string PLAYER_PREFS_INPUT_BINDING = "PlayerInputBinding";
+    public enum Binding {
+        Move_Up,
+        Move_Down,
+        Move_Left,
+        Move_Right,
+        Interact,
+        Alternate_Interact,
+        Pause,
+    }
     public static GameInput Instance { get; private set; }
     private PlayerInputActions playerInputActions;
     //publish the event
@@ -24,7 +35,9 @@ public class GameInput : MonoBehaviour {
         playerInputActions.Player.Interact.performed += Interact_Performed;
         playerInputActions.Player.Alternate.performed += AlternateInteract_Performed;
         playerInputActions.Player.Pause.performed += Pause_Performed;
-
+        if (PlayerPrefs.HasKey(PLAYER_PREFS_INPUT_BINDING)) {
+            playerInputActions.LoadBindingOverridesFromJson(PlayerPrefs.GetString(PLAYER_PREFS_INPUT_BINDING));
+        }
     }
     private void OnDestroy() {
         playerInputActions.Player.Interact.performed -= Interact_Performed;
@@ -68,5 +81,67 @@ public class GameInput : MonoBehaviour {
         // Normalize the vector when pressing two keys simultaneously for diagonal movement.
         // This ensures the movement speed remains consistent (magnitude is normalized to 1).
         return inputPlayerCoordinatesVector.normalized;
+    }
+
+    public string GetBindingText(Binding binding) {
+        switch (binding) {
+            default:
+            case Binding.Move_Up:
+                return playerInputActions.Player.Move.bindings[1].ToDisplayString();
+            case Binding.Move_Down:
+                return playerInputActions.Player.Move.bindings[2].ToDisplayString();
+            case Binding.Move_Left:
+                return playerInputActions.Player.Move.bindings[3].ToDisplayString();
+            case Binding.Move_Right:
+                return playerInputActions.Player.Move.bindings[4].ToDisplayString();
+            case Binding.Interact:
+                return playerInputActions.Player.Interact.bindings[0].ToDisplayString();
+            case Binding.Pause:
+                return playerInputActions.Player.Pause.bindings[0].ToDisplayString();
+            case Binding.Alternate_Interact:
+                return playerInputActions.Player.Alternate.bindings[0].ToDisplayString();
+        }
+    }
+    public void RebindBinding(Binding binding, Action onActionRebound) {
+        playerInputActions.Player.Disable();
+        InputAction inputAction;
+        int bindingIndex;
+        switch (binding) {
+
+            default:
+            case Binding.Move_Up:
+                inputAction = playerInputActions.Player.Move;
+                bindingIndex = 1;
+                break;
+            case Binding.Move_Down:
+                inputAction = playerInputActions.Player.Move;
+                bindingIndex = 2;
+                break;
+            case Binding.Move_Left:
+                inputAction = playerInputActions.Player.Move;
+                bindingIndex = 3;
+                break;
+            case Binding.Move_Right:
+                inputAction = playerInputActions.Player.Move;
+                bindingIndex = 4;
+                break;
+            case Binding.Interact:
+                inputAction = playerInputActions.Player.Interact;
+                bindingIndex = 0;
+                break;
+            case Binding.Alternate_Interact:
+                inputAction = playerInputActions.Player.Alternate;
+                bindingIndex = 0;
+                break;
+        }
+        inputAction.PerformInteractiveRebinding(bindingIndex)
+        .OnComplete((callback) => {
+            callback.Dispose();
+            playerInputActions.Player.Enable();
+            onActionRebound();
+            //to save locally the rebinding
+            PlayerPrefs.SetString(PLAYER_PREFS_INPUT_BINDING, playerInputActions.SaveBindingOverridesAsJson());
+        })
+        .Start();
     }
 }
