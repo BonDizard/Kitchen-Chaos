@@ -20,7 +20,8 @@ public class GamePauseUI : MonoBehaviour {
             KitchenGameManger.Instance.TogglePauseGame();
         });
         optionsButton.onClick.AddListener(() => {
-            OptionsUI.Instance.Show();
+            OptionsUI.Instance.Show(Show);
+            Hide();
         });
     }
     private void Start() {
@@ -36,6 +37,8 @@ public class GamePauseUI : MonoBehaviour {
     }
     private void Show() {
         gameObject.SetActive(true);
+
+        resumeButton.Select();
     }
     private void Hide() {
         gameObject.SetActive(false);

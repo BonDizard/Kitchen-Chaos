@@ -107,7 +107,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
             Vector3 moveDirectionX = new Vector3(moveDirection.x, 0, 0);
             //now if player is trying to move diagonal while the object there in front 
             //check if moveDirection contains change in x and there is nothing on left of the player 
-            canThePlayerMove = moveDirection.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * PlayerHeight, playerRadius, moveDirectionX, distanceToMove);
+            canThePlayerMove = (moveDirection.x < -0.5f || moveDirection.x > 0.5f) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * PlayerHeight, playerRadius, moveDirectionX, distanceToMove);
             //if then move towards
             if (canThePlayerMove) {
                 moveDirection = moveDirectionX;
@@ -116,7 +116,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
             else {
                 //check if moveDirection contains change in z and there is nothing on left of the player 
                 Vector3 moveDirectionZ = new Vector3(0, 0, moveDirection.z);
-                canThePlayerMove = moveDirection.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * PlayerHeight, playerRadius, moveDirectionZ, distanceToMove);
+                canThePlayerMove = (moveDirection.z < -0.5f || moveDirection.z > 0.5f) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * PlayerHeight, playerRadius, moveDirectionZ, distanceToMove);
 
                 if (canThePlayerMove) {
                     moveDirection = moveDirectionZ;
