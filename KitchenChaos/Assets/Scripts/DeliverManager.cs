@@ -1,6 +1,6 @@
 /*
  * Author: Bharath Kumar S
- * Date: 25-09-2024
+ * Date: 26-09-2024
  * Delivery Logic handled here.
  */
 using System;
@@ -11,6 +11,9 @@ public class DeliverManager : MonoBehaviour {
     public static DeliverManager Instance { get; private set; }
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeCompleted;
+    public event EventHandler OnRecipeSucess;
+    public event EventHandler OnRecipeFailed;
+
     public RecipeListSO menu;
     private List<RecipeSO> waitingRecipeSOList;
     private float spawnTimer;
@@ -87,6 +90,8 @@ public class DeliverManager : MonoBehaviour {
                     // Debug.Log("Correct recipe delivered: " + waitingRecipe.name);
                     waitingRecipeSOList.RemoveAt(i);
                     OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+                    OnRecipeSucess?.Invoke(this, EventArgs.Empty);
+
                     return;
                 }
                 else {
@@ -97,8 +102,8 @@ public class DeliverManager : MonoBehaviour {
                 Debug.LogWarning("Ingredient count mismatch for recipe: " + waitingRecipe.name);
             }
         }
-
-        Debug.LogWarning("No matching recipe found for the plate.");
+        OnRecipeFailed?.Invoke(this, EventArgs.Empty);
+        //Debug.LogWarning("No matching recipe found for the plate.");
     }
 
 

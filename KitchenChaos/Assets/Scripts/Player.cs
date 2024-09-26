@@ -8,6 +8,7 @@ using System;
 using UnityEngine;
 
 public class Player : MonoBehaviour, IKitchenObjectParent {
+    public event EventHandler OnPickedSomething;
     public static Player Instance { get; private set; }
     public event EventHandler<onSelectedCounterChangeEventArgs> onSelectedCounterChange;
 
@@ -19,8 +20,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
     [SerializeField] private LayerMask counterLayerMask;
     [SerializeField] private Transform kitchenObjectHoldPoint;
 
-
-    private bool isWalking;
+    public bool isWalking;
     private Vector3 lastMoveDirection;
     private BaseCounter selectedCounter;
     private KitchenObject kitchenObject;
@@ -144,8 +144,12 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
         return kitchenObjectHoldPoint;
     }
 
+    //called when picked something
     public void SetKitchenObject(KitchenObject kitchenObject) {
         this.kitchenObject = kitchenObject;
+        if (kitchenObject != null) {
+            OnPickedSomething?.Invoke(this, EventArgs.Empty);
+        }
     }
     public KitchenObject GetKitchenObject() {
         return kitchenObject;

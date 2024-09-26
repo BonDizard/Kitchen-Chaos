@@ -7,6 +7,7 @@ using System;
 using UnityEngine;
 
 public class CuttingCounter : BaseCounter, IProgressBar {
+    public static event EventHandler OnAnyCut;
     [SerializeField] private CuttingRecipeSO[] cuttingKitchenObjectsArray;
     public event EventHandler OnCut;
     public event EventHandler<IProgressBar.OnProgressChangedEventArgs> OnProgressChanged;
@@ -64,6 +65,7 @@ public class CuttingCounter : BaseCounter, IProgressBar {
             });
 
             OnCut?.Invoke(this, EventArgs.Empty);
+            OnAnyCut?.Invoke(this, EventArgs.Empty);//for sound
 
             if (cuttingProgress >= cuttingRecipeSO.maxCutRequiredForObject) {
                 KitchenObjectsSO outputKitchenObjectSO = GetKitchenObjectFromInput(GetKitchenObject().GetKitchenObjectSO());

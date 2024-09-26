@@ -6,7 +6,6 @@
 
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.EventSystems;
 using System;
 
 public class PlateKitchenObject : KitchenObject {

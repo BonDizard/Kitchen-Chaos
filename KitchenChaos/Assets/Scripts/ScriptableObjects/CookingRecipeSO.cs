@@ -1,5 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+/*
+ * Author: Bharath Kumar S
+ * Date: 25-09-2024
+ * Scriptable Object for Cooked Burger
+ */
 using UnityEngine;
 
 [CreateAssetMenu()]

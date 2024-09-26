@@ -1,7 +1,9 @@
+/*
+ * Author: Bharath Kumar S
+ * Date: 25-09-2024
+ * Progressbar interface
+ */
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 public interface IProgressBar {
 
