@@ -18,7 +18,6 @@ public class KitchenGameManger : MonoBehaviour {
     public event EventHandler OnGameUnPaused;
 
     public static KitchenGameManger Instance { get; private set; }
-    float waitingToStartTimer = 1f;
     float countDownToStartTimer = 3f;
     float gamePlayingTimer;
     float gamePlayingTimerMax = 10f;
@@ -30,18 +29,21 @@ public class KitchenGameManger : MonoBehaviour {
     }
     private void Start() {
         GameInput.Instance.OnPauseButtonClicked += GameInput_OnPauseButtonCLicked;
+        GameInput.Instance.OnInteractionPerformed += GameInput_OnInteractionPerformed;
     }
+    private void GameInput_OnInteractionPerformed(object sender, EventArgs e) {
+        if (state == State.WaitingToStart) {
+            state = State.CoolDownToStart;
+            OnStateChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
     private void GameInput_OnPauseButtonCLicked(object sender, EventArgs e) {
         TogglePauseGame();
     }
     private void Update() {
         switch (state) {
             case State.WaitingToStart:
-                waitingToStartTimer -= Time.deltaTime;
-                if (waitingToStartTimer < 0f) {
-                    state = State.CoolDownToStart;
-                }
-                OnStateChanged?.Invoke(this, EventArgs.Empty);
                 break;
             case State.CoolDownToStart:
                 countDownToStartTimer -= Time.deltaTime;

@@ -19,6 +19,7 @@ public class GameInput : MonoBehaviour {
         Alternate_Interact,
         Pause,
     }
+    public event EventHandler OnBingingRebind;
     public static GameInput Instance { get; private set; }
     private PlayerInputActions playerInputActions;
     //publish the event
@@ -133,6 +134,10 @@ public class GameInput : MonoBehaviour {
                 inputAction = playerInputActions.Player.Alternate;
                 bindingIndex = 0;
                 break;
+            case Binding.Pause:
+                inputAction = playerInputActions.Player.Pause;
+                bindingIndex = 0;
+                break;
         }
         inputAction.PerformInteractiveRebinding(bindingIndex)
         .OnComplete((callback) => {
@@ -140,6 +145,7 @@ public class GameInput : MonoBehaviour {
             playerInputActions.Player.Enable();
             onActionRebound();
             //to save locally the rebinding
+            OnBingingRebind?.Invoke(this, EventArgs.Empty);
             PlayerPrefs.SetString(PLAYER_PREFS_INPUT_BINDING, playerInputActions.SaveBindingOverridesAsJson());
         })
         .Start();

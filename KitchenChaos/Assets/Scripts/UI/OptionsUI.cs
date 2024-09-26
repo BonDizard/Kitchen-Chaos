@@ -4,7 +4,6 @@
  * Descriptions Option UI logic
  */
 using System;
-using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +19,8 @@ public class OptionsUI : MonoBehaviour {
     [SerializeField] private Button moveDownButton;
     [SerializeField] private Button interactButton;
     [SerializeField] private Button alternateInteractButton;
+    [SerializeField] private Button pauseButton;
+    [SerializeField] private TextMeshProUGUI pauseText;
     [SerializeField] private TextMeshProUGUI moveUpText;
     [SerializeField] private TextMeshProUGUI moveDownText;
     [SerializeField] private TextMeshProUGUI moveLeftText;
@@ -62,6 +63,9 @@ public class OptionsUI : MonoBehaviour {
         alternateInteractButton.onClick.AddListener(() => {
             RebindBinding(GameInput.Binding.Alternate_Interact);
         });
+        pauseButton.onClick.AddListener(() => {
+            RebindBinding(GameInput.Binding.Pause);
+        });
     }
     private void Start() {
         KitchenGameManger.Instance.OnGameUnPaused += KitchenGameManger_OnGameUnPaused;
@@ -82,6 +86,7 @@ public class OptionsUI : MonoBehaviour {
         moveRightText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Move_Right);
         interactText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Interact);
         alternateText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Alternate_Interact);
+        pauseText.text = GameInput.Instance.GetBindingText(GameInput.Binding.Pause);
     }
     public void Show(Action onCloseAction) {
         this.onCloseAction = onCloseAction;
