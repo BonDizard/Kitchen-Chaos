@@ -141,6 +141,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a70c4bfd42eeee46a1a4e8b992f58e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cookingCounter: {fileID: 8494646734549162883}
 --- !u!1001 &57925829336981486
 PrefabInstance:
   m_ObjectHideFlags: 0

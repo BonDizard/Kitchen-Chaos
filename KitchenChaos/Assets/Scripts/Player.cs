@@ -20,35 +20,42 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
     [SerializeField] private LayerMask counterLayerMask;
     [SerializeField] private Transform kitchenObjectHoldPoint;
 
-    public bool isWalking;
+    private bool isWalking;
     private Vector3 lastMoveDirection;
     private BaseCounter selectedCounter;
     private KitchenObject kitchenObject;
 
-    private void Update() {
-        HandleThePlayerMovement();
-        HandleThePlayerIntercation();
-    }
-    private void Start() {
-        //subsribe to the events in gameinput and listen to them
-        gameInput.OnInteractionPerformed += GameInput_OnInteractionPerformed;
-        gameInput.OnAlternateInteractionPerformed += GameInput_OnAlternateInteractionPerformed;
-    }
-    private void GameInput_OnAlternateInteractionPerformed(object sender, System.EventArgs e) {
-        if (selectedCounter != null) {
-            selectedCounter.InteractAlternate(this);
-        }
-    }
+
+
     private void Awake() {
         if (Instance != null) {
             Debug.Log("There is more than one Instance of Player");
         }
         Instance = this;
     }
-    private void GameInput_OnInteractionPerformed(object sender, System.EventArgs e) {
-        if (selectedCounter != null) {
-            selectedCounter.Interact(this);
+    private void Start() {
+        //subsribe to the events in gameinput and listen to them
+        gameInput.OnInteractionPerformed += GameInput_OnInteractionPerformed;
+        gameInput.OnAlternateInteractionPerformed += GameInput_OnAlternateInteractionPerformed;
+    }
+
+    private void GameInput_OnAlternateInteractionPerformed(object sender, System.EventArgs e) {
+        if (KitchenGameManger.Instance.IsGamePlaying()) {
+            if (selectedCounter != null) {
+                selectedCounter.InteractAlternate(this);
+            }
         }
+    }
+    private void GameInput_OnInteractionPerformed(object sender, System.EventArgs e) {
+        if (KitchenGameManger.Instance.IsGamePlaying()) {
+            if (selectedCounter != null) {
+                selectedCounter.Interact(this);
+            }
+        }
+    }
+    private void Update() {
+        HandleThePlayerMovement();
+        HandleThePlayerIntercation();
     }
     public bool getIfThePlayerisWalking() {
         return isWalking;

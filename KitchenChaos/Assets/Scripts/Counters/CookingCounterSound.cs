@@ -9,7 +9,7 @@ public class CookingCounterSound : MonoBehaviour {
     [SerializeField] private CookingCounter cookingCounter;
     private AudioSource audioSource;
     private void Awake() {
-        audioSource.GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Start() {
