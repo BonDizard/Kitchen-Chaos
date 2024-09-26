@@ -12,7 +12,7 @@ public static class Loader {
         LoadingScene,
         MenuScene,
     }
-    static Scene targetScene;
+    private static Scene targetScene;
 
     public static void Load(Scene scene) {
         targetScene = scene;

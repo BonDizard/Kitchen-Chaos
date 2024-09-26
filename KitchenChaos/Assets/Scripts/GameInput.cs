@@ -8,20 +8,34 @@ using System;
 using UnityEngine;
 
 public class GameInput : MonoBehaviour {
+    public static GameInput Instance { get; private set; }
     private PlayerInputActions playerInputActions;
     //publish the event
     public event EventHandler OnInteractionPerformed;
     public event EventHandler OnAlternateInteractionPerformed;
+    public event EventHandler OnPauseButtonClicked;
 
     private void Awake() {
+        Instance = this;
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
 
         // Whenever the Interact key is pressed, it listens and triggers the Interact_Performed.
         playerInputActions.Player.Interact.performed += Interact_Performed;
         playerInputActions.Player.Alternate.performed += AlternateInteract_Performed;
-    }
+        playerInputActions.Player.Pause.performed += Pause_Performed;
 
+    }
+    private void OnDestroy() {
+        playerInputActions.Player.Interact.performed -= Interact_Performed;
+        playerInputActions.Player.Alternate.performed -= AlternateInteract_Performed;
+        playerInputActions.Player.Pause.performed -= Pause_Performed;
+
+        playerInputActions.Dispose();
+    }
+    private void Pause_Performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {
+        OnPauseButtonClicked?.Invoke(this, EventArgs.Empty);
+    }
     private void AlternateInteract_Performed(UnityEngine.InputSystem.InputAction.CallbackContext obj) {
         //if no one subscribed then it will be null so check null before Invoke by ?(null condinal operator)
         OnAlternateInteractionPerformed?.Invoke(this, EventArgs.Empty);

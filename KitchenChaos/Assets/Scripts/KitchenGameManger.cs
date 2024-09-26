@@ -14,18 +14,26 @@ public enum State {
 }
 public class KitchenGameManger : MonoBehaviour {
     public event EventHandler OnStateChanged;
+    public event EventHandler OnGamePaused;
+    public event EventHandler OnGameUnPaused;
+
     public static KitchenGameManger Instance { get; private set; }
     float waitingToStartTimer = 1f;
     float countDownToStartTimer = 3f;
     float gamePlayingTimer;
     float gamePlayingTimerMax = 10f;
-
+    bool isGamePaused = false;
     public State state;
     private void Awake() {
         Instance = this;
         state = State.WaitingToStart;
     }
-
+    private void Start() {
+        GameInput.Instance.OnPauseButtonClicked += GameInput_OnPauseButtonCLicked;
+    }
+    private void GameInput_OnPauseButtonCLicked(object sender, EventArgs e) {
+        TogglePauseGame();
+    }
     private void Update() {
         switch (state) {
             case State.WaitingToStart:
@@ -73,5 +81,16 @@ public class KitchenGameManger : MonoBehaviour {
     }
     public float GetGamePlayingTimerNormalized() {
         return 1 - (gamePlayingTimer / gamePlayingTimerMax);
+    }
+    public void TogglePauseGame() {
+        isGamePaused = !isGamePaused;
+        if (isGamePaused) {
+            Time.timeScale = 0f;
+            OnGamePaused?.Invoke(this, EventArgs.Empty);
+        }
+        else {
+            Time.timeScale = 1f;
+            OnGameUnPaused?.Invoke(this, EventArgs.Empty);
+        }
     }
 }
