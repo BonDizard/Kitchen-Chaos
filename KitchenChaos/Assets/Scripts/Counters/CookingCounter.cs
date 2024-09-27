@@ -220,4 +220,7 @@ public class CookingCounter : BaseCounter, IProgressBar {
         Debug.LogError("-----GetBurningRecipeSOFromInput returning null-----");
         return null;
     }
+    public bool IsFried() {
+        return state == State.Fried;
+    }
 }

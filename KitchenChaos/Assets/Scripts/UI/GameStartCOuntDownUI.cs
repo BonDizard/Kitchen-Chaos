@@ -35,7 +35,7 @@ public class GameStartCOuntDownUI : MonoBehaviour {
         if (previousNumber != countDownNumber) {
             previousNumber = countDownNumber;
             animator.SetTrigger(NUMBER_POP_ANIMATION_NAME);
-            SoundManager.Instance.PlayeCountDownSound();
+            SoundManager.Instance.PlayCountDownSound();
         }
     }
 
