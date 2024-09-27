@@ -46,6 +46,9 @@ public class SoundManager : MonoBehaviour {
     public void PlayWalkingSound(Vector3 position, float volume) {
         PlaySound(audioClipRefsSO.footstep, position, volume);
     }
+    public void PlayeCountDownSound() {
+        PlaySound(audioClipRefsSO.warning, Vector2.zero);
+    }
     private void PlaySound(AudioClip[] audioClipArray, Vector3 position, float volume = 1f) {
         PlaySound(audioClipArray[Random.Range(0, audioClipArray.Length)], position, volume);
     }

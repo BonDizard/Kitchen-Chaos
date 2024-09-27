@@ -7,7 +7,15 @@ using TMPro;
 using UnityEngine;
 
 public class GameStartCOuntDownUI : MonoBehaviour {
+    private const string NUMBER_POP_ANIMATION_NAME = "NumberPopUp";
+    private Animator animator;
+    private int previousNumber;
     [SerializeField] TextMeshProUGUI countDownText;
+
+
+    private void Awake() {
+        animator = GetComponent<Animator>();
+    }
     private void Start() {
         KitchenGameManger.Instance.OnStateChanged += KitchenGameManger_OnStateChanged;
         Hide();
@@ -22,7 +30,13 @@ public class GameStartCOuntDownUI : MonoBehaviour {
         }
     }
     private void Update() {
-        countDownText.text = Mathf.Ceil(KitchenGameManger.Instance.GetCountDownTime()).ToString();
+        int countDownNumber = Mathf.CeilToInt(KitchenGameManger.Instance.GetCountDownTime());
+        countDownText.text = countDownNumber.ToString();
+        if (previousNumber != countDownNumber) {
+            previousNumber = countDownNumber;
+            animator.SetTrigger(NUMBER_POP_ANIMATION_NAME);
+            SoundManager.Instance.PlayeCountDownSound();
+        }
     }
 
     private void Show() {

@@ -2885,6 +2885,8 @@ GameObject:
   m_Component:
   - component: {fileID: 481905876}
   - component: {fileID: 481905877}
+  - component: {fileID: 481905879}
+  - component: {fileID: 481905878}
   m_Layer: 5
   m_Name: GameStartCountdownUI
   m_TagString: Untagged
@@ -2902,7 +2904,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1225717988}
   m_Father: {fileID: 953560221}
@@ -2925,6 +2927,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countDownText: {fileID: 1225717989}
+--- !u!225 &481905878
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 481905875}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
+--- !u!95 &481905879
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 481905875}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d22533460235a3843b28b05b203ce6e8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &503793587
 GameObject:
   m_ObjectHideFlags: 0
@@ -7727,10 +7762,10 @@ RectTransform:
   - {fileID: 1578112794}
   - {fileID: 1847737922}
   - {fileID: 2069218319}
+  - {fileID: 2992827}
   - {fileID: 1153296878}
   - {fileID: 1442410845}
   - {fileID: 372210289}
-  - {fileID: 2992827}
   m_Father: {fileID: 953560221}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -7750,17 +7785,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 785dbe4ad180c9447be13dbfeb782ddf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  keyMoveUpText: {fileID: 0}
-  keyMoveDownText: {fileID: 0}
-  keyMoveLeftText: {fileID: 0}
-  keyMoveRightText: {fileID: 0}
-  keyInteractText: {fileID: 0}
-  KeyAlternateInteractText: {fileID: 0}
-  KeyPauseText: {fileID: 0}
-  KeyGamepadMoveText: {fileID: 0}
-  KeyGamepadInteractText: {fileID: 0}
-  KeyGamepadAlternateText: {fileID: 0}
-  KeyGamepadPauseText: {fileID: 0}
+  keyMoveUpText: {fileID: 1501142383}
+  keyMoveDownText: {fileID: 796566457}
+  keyMoveLeftText: {fileID: 1062276410}
+  keyMoveRightText: {fileID: 1447647030}
+  keyInteractText: {fileID: 566229678}
+  KeyAlternateInteractText: {fileID: 1343010826}
+  KeyPauseText: {fileID: 946371947}
+  KeyGamepadMoveText: {fileID: 64017900}
+  KeyGamepadInteractText: {fileID: 998437441}
+  KeyGamepadAlternateText: {fileID: 1515193273}
+  KeyGamepadPauseText: {fileID: 2067430007}
 --- !u!4 &1046445326 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1101380267609760507, guid: 133b480cc83e5cb4daebe8ba1361db7c, type: 3}
