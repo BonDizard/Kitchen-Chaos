@@ -6,8 +6,8 @@
 
 using System;
 using UnityEngine;
-
-public class Player : MonoBehaviour, IKitchenObjectParent {
+using Unity.Netcode;
+public class Player : NetworkBehaviour, IKitchenObjectParent {
     public event EventHandler OnPickedSomething;
     //public static Player Instance { get; private set; }
     public event EventHandler<onSelectedCounterChangeEventArgs> onSelectedCounterChange;
@@ -50,8 +50,12 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
         }
     }
     private void Update() {
+        if (!IsOwner) {
+            return;
+        }
         HandleThePlayerMovement();
         HandleThePlayerIntercation();
+
     }
     public bool getIfThePlayerisWalking() {
         return isWalking;
