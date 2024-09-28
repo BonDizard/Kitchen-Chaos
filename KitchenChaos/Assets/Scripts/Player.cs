@@ -9,14 +9,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IKitchenObjectParent {
     public event EventHandler OnPickedSomething;
-    public static Player Instance { get; private set; }
+    //public static Player Instance { get; private set; }
     public event EventHandler<onSelectedCounterChangeEventArgs> onSelectedCounterChange;
 
     public class onSelectedCounterChangeEventArgs : EventArgs {
         public BaseCounter selectedCounter;
     }
     [SerializeField] private float movementSpeed = 7f;
-    [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask counterLayerMask;
     [SerializeField] private Transform kitchenObjectHoldPoint;
 
@@ -28,15 +27,12 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
 
 
     private void Awake() {
-        if (Instance != null) {
-            Debug.Log("There is more than one Instance of Player");
-        }
-        Instance = this;
+        //    Instance = this;
     }
     private void Start() {
         //subsribe to the events in gameinput and listen to them
-        gameInput.OnInteractionPerformed += GameInput_OnInteractionPerformed;
-        gameInput.OnAlternateInteractionPerformed += GameInput_OnAlternateInteractionPerformed;
+        GameInput.Instance.OnInteractionPerformed += GameInput_OnInteractionPerformed;
+        GameInput.Instance.OnAlternateInteractionPerformed += GameInput_OnAlternateInteractionPerformed;
     }
 
     private void GameInput_OnAlternateInteractionPerformed(object sender, System.EventArgs e) {
@@ -61,7 +57,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
         return isWalking;
     }
     private void HandleThePlayerIntercation() {
-        Vector2 inputPlayerCoordinates = gameInput.GetPlayerMovementVectorNormalized();
+        Vector2 inputPlayerCoordinates = GameInput.Instance.GetPlayerMovementVectorNormalized();
         Vector3 moveDirection = new Vector3(inputPlayerCoordinates.x, 0.0f, inputPlayerCoordinates.y);
 
         float interactonDistance = 2f;
@@ -91,7 +87,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent {
         }
     }
     private void HandleThePlayerMovement() {
-        Vector2 inputPlayerCoordinatesVector = gameInput.GetPlayerMovementVectorNormalized();
+        Vector2 inputPlayerCoordinatesVector = GameInput.Instance.GetPlayerMovementVectorNormalized();
         Vector3 moveDirection = new Vector3(inputPlayerCoordinatesVector.x, 0.0f, inputPlayerCoordinatesVector.y);
 
         float playerRadius = 0.7f;

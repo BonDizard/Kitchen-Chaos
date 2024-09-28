@@ -11,7 +11,7 @@ public class SelectedCounterVisuals : MonoBehaviour {
 
     private void Start() {
         // Subscribe to the event (listening) and trigger Player_OnSelectedCounterChange when the event is fired
-        Player.Instance.onSelectedCounterChange += Player_OnSelectedCounterChange;
+        // Player.Instance.onSelectedCounterChange += Player_OnSelectedCounterChange;
     }
 
     private void Player_OnSelectedCounterChange(object sender, Player.onSelectedCounterChangeEventArgs e) {
