@@ -4,6 +4,7 @@
  * Description: Parent of the kitchen object(counters on which incridents are there) 
  */
 
+using Unity.Netcode;
 using UnityEngine;
 
 public interface IKitchenObjectParent {
@@ -12,4 +13,5 @@ public interface IKitchenObjectParent {
     public KitchenObject GetKitchenObject();
     public void ClearKitchenObject();
     public bool HasKitchenObject();
+    public NetworkObject GetNetworkObject();
 }

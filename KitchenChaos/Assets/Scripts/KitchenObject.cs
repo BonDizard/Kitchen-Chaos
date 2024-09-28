@@ -4,9 +4,10 @@
  * Description: Code for handling kitchen object interactions, including spawning, assigning to parent objects, and destruction.
  */
 
+using Unity.Netcode;
 using UnityEngine;
 
-public class KitchenObject : MonoBehaviour {
+public class KitchenObject : NetworkBehaviour {
 
     // A serialized field to assign a KitchenObjectsSO ScriptableObject in the Unity editor.
     [SerializeField] private KitchenObjectsSO kitchenObjectsSO;
@@ -34,8 +35,8 @@ public class KitchenObject : MonoBehaviour {
         kitchenObjectParent.SetKitchenObject(this);
 
         // Set the transform of this kitchen object to follow the parent's transform.
-        transform.parent = kitchenObjectParent.GetKitchenObjectFollowTrasform();
-        transform.localPosition = Vector3.zero;  // Reset local position to zero to ensure proper placement.
+        // transform.parent = kitchenObjectParent.GetKitchenObjectFollowTrasform();
+        // transform.localPosition = Vector3.zero;  // Reset local position to zero to ensure proper placement.
     }
 
     // Getter method to retrieve the current parent of this kitchen object.
@@ -60,18 +61,9 @@ public class KitchenObject : MonoBehaviour {
             return false;
         }
     }
+
     // Static method to spawn a new kitchen object based on a provided KitchenObjectsSO and assign it to a parent.
-    public static KitchenObject SpawnKitchenObect(KitchenObjectsSO kitchenObjectsSO, IKitchenObjectParent kitchenObjectParent) {
-        // Instantiate the prefab from the KitchenObjectsSO.
-        Transform kitchenObjectTransform = Instantiate(kitchenObjectsSO.prefab);
-
-        // Get the KitchenObject component from the instantiated prefab.
-        KitchenObject kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
-
-        // Set the new kitchen object to its parent.
-        kitchenObject.SetKitchenObjectToParent(kitchenObjectParent);
-
-        // Return the created kitchen object.
-        return kitchenObject;
+    public static void SpawnKitchenObect(KitchenObjectsSO kitchenObjectsSO, IKitchenObjectParent kitchenObjectParent) {
+        KitchenGameMultiplayer.Instance.SpawnKitchenObect(kitchenObjectsSO, kitchenObjectParent);
     }
 }
