@@ -9,7 +9,13 @@ using UnityEngine;
 using Unity.Netcode;
 public class Player : NetworkBehaviour, IKitchenObjectParent {
     public event EventHandler OnPickedSomething;
-    //public static Player Instance { get; private set; }
+    public static event EventHandler OnAnyPlayerSpwaned;
+    public static event EventHandler OnAnyPickedSomething;
+
+    public static void ResetStaticData() {
+        OnAnyPlayerSpwaned = null;
+    }
+    public static Player LocalInstance { get; private set; }
     public event EventHandler<onSelectedCounterChangeEventArgs> onSelectedCounterChange;
 
     public class onSelectedCounterChangeEventArgs : EventArgs {
@@ -24,10 +30,11 @@ public class Player : NetworkBehaviour, IKitchenObjectParent {
     private BaseCounter selectedCounter;
     private KitchenObject kitchenObject;
 
-
-
-    private void Awake() {
-        //    Instance = this;
+    public override void OnNetworkSpawn() {
+        if (IsOwner) {
+            LocalInstance = this;
+        }
+        OnAnyPlayerSpwaned?.Invoke(this, EventArgs.Empty);
     }
     private void Start() {
         //subsribe to the events in gameinput and listen to them
@@ -156,6 +163,7 @@ public class Player : NetworkBehaviour, IKitchenObjectParent {
         this.kitchenObject = kitchenObject;
         if (kitchenObject != null) {
             OnPickedSomething?.Invoke(this, EventArgs.Empty);
+            OnAnyPickedSomething?.Invoke(this, EventArgs.Empty);
         }
     }
     public KitchenObject GetKitchenObject() {

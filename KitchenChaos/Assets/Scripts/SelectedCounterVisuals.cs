@@ -10,10 +10,20 @@ public class SelectedCounterVisuals : MonoBehaviour {
     [SerializeField] private GameObject[] visualGameObjectArray;
 
     private void Start() {
-        // Subscribe to the event (listening) and trigger Player_OnSelectedCounterChange when the event is fired
-        // Player.Instance.onSelectedCounterChange += Player_OnSelectedCounterChange;
+        if (Player.LocalInstance != null) {
+            // Subscribe to the event (listening) and trigger Player_OnSelectedCounterChange when the event is fired
+            Player.LocalInstance.onSelectedCounterChange += Player_OnSelectedCounterChange;
+        }
+        else {
+            Player.OnAnyPlayerSpwaned += Player_OnAnyPlayerSpwaned;
+        }
     }
-
+    private void Player_OnAnyPlayerSpwaned(object sender, System.EventArgs e) {
+        if (Player.LocalInstance != null) {
+            Player.LocalInstance.onSelectedCounterChange -= Player_OnSelectedCounterChange;
+            Player.LocalInstance.onSelectedCounterChange += Player_OnSelectedCounterChange;
+        }
+    }
     private void Player_OnSelectedCounterChange(object sender, Player.onSelectedCounterChangeEventArgs e) {
         if (e.selectedCounter == baseCounter) {
             Show();
