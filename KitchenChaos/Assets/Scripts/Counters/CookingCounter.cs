@@ -106,13 +106,13 @@ public class CookingCounter : BaseCounter, IProgressBar {
             if (!player.HasKitchenObject()) {
                 // The player does not have anything
                 GetKitchenObject().SetKitchenObjectToParent(player);
-                state.Value = State.Idle;
+                SetStateIdleServerRpc();
             }
             else {
                 // The player is holding something
                 if (player.GetKitchenObject().TryGetPlate(out PlateKitchenObject plateKitchenObject)) {
                     if (plateKitchenObject.TryAddIngredients(GetKitchenObject().GetKitchenObjectSO())) {
-                        GetKitchenObject().DestroySelf();
+                        KitchenObject.DestroyKitchenObject(GetKitchenObject());
                         SetStateIdleServerRpc();
                     }
                 }
