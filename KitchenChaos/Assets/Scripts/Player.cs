@@ -7,6 +7,7 @@
 using System;
 using UnityEngine;
 using Unity.Netcode;
+using System.Collections.Generic;
 public class Player : NetworkBehaviour, IKitchenObjectParent {
     public event EventHandler OnPickedSomething;
     public static event EventHandler OnAnyPlayerSpwaned;
@@ -23,6 +24,8 @@ public class Player : NetworkBehaviour, IKitchenObjectParent {
     }
     [SerializeField] private float movementSpeed = 7f;
     [SerializeField] private LayerMask counterLayerMask;
+    [SerializeField] private LayerMask collisionLayerMask;
+    [SerializeField] private List<Vector2> spawnPositions;
     [SerializeField] private Transform kitchenObjectHoldPoint;
 
     private bool isWalking;
@@ -34,6 +37,7 @@ public class Player : NetworkBehaviour, IKitchenObjectParent {
         if (IsOwner) {
             LocalInstance = this;
         }
+        transform.position = spawnPositions[(int)OwnerClientId];
         OnAnyPlayerSpwaned?.Invoke(this, EventArgs.Empty);
     }
     private void Start() {
@@ -107,14 +111,14 @@ public class Player : NetworkBehaviour, IKitchenObjectParent {
         float distanceToMove = Time.deltaTime * movementSpeed;
 
         //raycast and check if anything ahead
-        bool canThePlayerMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * PlayerHeight, playerRadius, moveDirection, distanceToMove);
+        bool canThePlayerMove = !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDirection, Quaternion.identity, distanceToMove, collisionLayerMask);
         //is anything there
         if (!canThePlayerMove) {
             //cannot move towards movementDirection
             Vector3 moveDirectionX = new Vector3(moveDirection.x, 0, 0);
             //now if player is trying to move diagonal while the object there in front 
             //check if moveDirection contains change in x and there is nothing on left of the player 
-            canThePlayerMove = (moveDirection.x < -0.5f || moveDirection.x > 0.5f) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * PlayerHeight, playerRadius, moveDirectionX, distanceToMove);
+            canThePlayerMove = (moveDirection.x < -0.5f || moveDirection.x > 0.5f) && !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDirectionX, Quaternion.identity, distanceToMove, collisionLayerMask);
             //if then move towards
             if (canThePlayerMove) {
                 moveDirection = moveDirectionX;
@@ -123,7 +127,7 @@ public class Player : NetworkBehaviour, IKitchenObjectParent {
             else {
                 //check if moveDirection contains change in z and there is nothing on left of the player 
                 Vector3 moveDirectionZ = new Vector3(0, 0, moveDirection.z);
-                canThePlayerMove = (moveDirection.z < -0.5f || moveDirection.z > 0.5f) && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * PlayerHeight, playerRadius, moveDirectionZ, distanceToMove);
+                canThePlayerMove = (moveDirection.z < -0.5f || moveDirection.z > 0.5f) && !Physics.BoxCast(transform.position, Vector3.one * playerRadius, moveDirectionZ, Quaternion.identity, distanceToMove, collisionLayerMask);
 
                 if (canThePlayerMove) {
                     moveDirection = moveDirectionZ;
