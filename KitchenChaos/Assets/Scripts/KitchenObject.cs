@@ -64,10 +64,11 @@ public class KitchenObject : NetworkBehaviour {
 
     // Destroys this kitchen object and clears the reference in the parent object.
     public void DestroySelf() {
-        kitchenObjectParent.ClearKitchenObject(); // Clear the reference in the parent.
         Destroy(gameObject); // Destroy the game object in the scene.
     }
-
+    public void ClearKitchenObjectOnParent() {
+        kitchenObjectParent.ClearKitchenObject(); // Clear the reference in the parent.
+    }
     public bool TryGetPlate(out PlateKitchenObject plateKitchenObject) {
 
         if (this is PlateKitchenObject) {
@@ -83,5 +84,8 @@ public class KitchenObject : NetworkBehaviour {
     // Static method to spawn a new kitchen object based on a provided KitchenObjectsSO and assign it to a parent.
     public static void SpawnKitchenObect(KitchenObjectsSO kitchenObjectsSO, IKitchenObjectParent kitchenObjectParent) {
         KitchenGameMultiplayer.Instance.SpawnKitchenObect(kitchenObjectsSO, kitchenObjectParent);
+    }
+    public static void DestroyKitchenObject(KitchenObject kitchenObject) {
+        KitchenGameMultiplayer.Instance.DestroyKitchenObect(kitchenObject);
     }
 }
