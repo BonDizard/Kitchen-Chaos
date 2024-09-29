@@ -106,8 +106,6 @@ public class Player : NetworkBehaviour, IKitchenObjectParent {
         Vector3 moveDirection = new Vector3(inputPlayerCoordinatesVector.x, 0.0f, inputPlayerCoordinatesVector.y);
 
         float playerRadius = 0.7f;
-        float PlayerHeight = 2f;
-
         float distanceToMove = Time.deltaTime * movementSpeed;
 
         //raycast and check if anything ahead
