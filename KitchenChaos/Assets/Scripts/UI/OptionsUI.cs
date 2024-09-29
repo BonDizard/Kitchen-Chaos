@@ -68,7 +68,7 @@ public class OptionsUI : MonoBehaviour {
         });
     }
     private void Start() {
-        KitchenGameManger.Instance.OnGameUnPaused += KitchenGameManger_OnGameUnPaused;
+        KitchenGameManger.Instance.OnLocalGameUnPaused += KitchenGameManger_OnGameUnPaused;
         UpdateVisual();
         Hide();
         HidePressAKeyToRebind();
