@@ -12,12 +12,28 @@ public class KitchenObject : NetworkBehaviour {
     // A serialized field to assign a KitchenObjectsSO ScriptableObject in the Unity editor.
     [SerializeField] private KitchenObjectsSO kitchenObjectsSO;
     private IKitchenObjectParent kitchenObjectParent;
+    private FollowTransform followTransform;
+    protected virtual void Awake() {
+        followTransform = GetComponent<FollowTransform>();
+    }
     public KitchenObjectsSO GetKitchenObjectSO() {
         return kitchenObjectsSO;
     }
 
     // Sets the parent object for this kitchen object and clears the old parent, if any.
     public void SetKitchenObjectToParent(IKitchenObjectParent kitchenObjectParent) {
+        SetKitchenObjectParentServerRpc(kitchenObjectParent.GetNetworkObject());
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void SetKitchenObjectParentServerRpc(NetworkObjectReference kitchenObjectParentNetworkObjectReference) {
+        SetKitchenObjectParentClientRpc(kitchenObjectParentNetworkObjectReference);
+    }
+
+    [ClientRpc]
+    private void SetKitchenObjectParentClientRpc(NetworkObjectReference kitchenObjectParentNetworkObjectReference) {
+        kitchenObjectParentNetworkObjectReference.TryGet(out NetworkObject kitchenObjectParentNetworkObject);
+        IKitchenObjectParent kitchenObjectParent = kitchenObjectParentNetworkObject.GetComponent<IKitchenObjectParent>();
         // If there is already a parent, clear the current kitchen object reference in the parent.
         if (this.kitchenObjectParent != null) {
             this.kitchenObjectParent.ClearKitchenObject();
@@ -35,8 +51,10 @@ public class KitchenObject : NetworkBehaviour {
         kitchenObjectParent.SetKitchenObject(this);
 
         // Set the transform of this kitchen object to follow the parent's transform.
+        followTransform.SetTransformToFollow(kitchenObjectParent.GetKitchenObjectFollowTrasform());
         // transform.parent = kitchenObjectParent.GetKitchenObjectFollowTrasform();
         // transform.localPosition = Vector3.zero;  // Reset local position to zero to ensure proper placement.
+
     }
 
     // Getter method to retrieve the current parent of this kitchen object.

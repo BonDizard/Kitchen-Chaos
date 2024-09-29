@@ -4,6 +4,7 @@
  * Container logic (spawining ingridents)
  */
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 public class ContainerCounter : BaseCounter, IKitchenObjectParent {
@@ -13,11 +14,20 @@ public class ContainerCounter : BaseCounter, IKitchenObjectParent {
         if (!player.HasKitchenObject()) {
             //player dont have anything
             KitchenObject.SpawnKitchenObect(kitchenScriptableObject, player);
-            OnPlayerGrabedAnObject?.Invoke(this, EventArgs.Empty);
+            InteractLogicServerRpc();
         }
         else {
             //player have an object
         }
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void InteractLogicServerRpc() {
+        InteractLogicClientRpc();
+    }
+
+    [ClientRpc]
+    private void InteractLogicClientRpc() {
+        OnPlayerGrabedAnObject?.Invoke(this, EventArgs.Empty);
     }
 
 }
