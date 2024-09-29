@@ -4,12 +4,19 @@
  * Description: Game Over UI 
  */
 using TMPro;
+using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameOverUI : MonoBehaviour {
     [SerializeField] TextMeshProUGUI deliveredItems;
+    [SerializeField] Button PlayAgainButton;
     private void Start() {
         KitchenGameManger.Instance.OnStateChanged += KitchenGameManger_OnStateChanged;
+        PlayAgainButton.onClick.AddListener(() => {
+            NetworkManager.Singleton.Shutdown();
+            Loader.Load(Loader.Scene.MenuScene);
+        });
         Hide();
     }
 

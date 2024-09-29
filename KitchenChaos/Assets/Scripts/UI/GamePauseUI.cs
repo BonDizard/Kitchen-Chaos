@@ -4,6 +4,7 @@
  * All inputs of the game are handled here.
  */
 
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ public class GamePauseUI : MonoBehaviour {
 
     private void Awake() {
         menuButton.onClick.AddListener(() => {
+            NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.MenuScene);
         });
         resumeButton.onClick.AddListener(() => {
