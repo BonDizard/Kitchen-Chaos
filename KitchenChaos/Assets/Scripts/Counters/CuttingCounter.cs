@@ -4,6 +4,7 @@
  * Cutting counter logic
  */
 using System;
+using Unity.Netcode;
 using UnityEngine;
 
 public class CuttingCounter : BaseCounter, IProgressBar {
@@ -39,15 +40,10 @@ public class CuttingCounter : BaseCounter, IProgressBar {
             if (player.HasKitchenObject()) {
                 //player has an object
                 if (IsTheObjectCuttable(player.GetKitchenObject().GetKitchenObjectSO())) {
+                    KitchenObject kitchenObject = player.GetKitchenObject();
                     //player is having object which is cuttable
-                    player.GetKitchenObject().SetKitchenObjectToParent(this);
-                    cuttingProgress = 0;
-
-                    CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOFromInput(GetKitchenObject().GetKitchenObjectSO());
-
-                    OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs {
-                        progressNormalized = (float)cuttingProgress / cuttingRecipeSO.maxCutRequiredForObject
-                    });
+                    kitchenObject.SetKitchenObjectToParent(this);
+                    InteractLogicPlaceObjectToCounterServerRpc();
                 }
             }
             else {
@@ -55,27 +51,52 @@ public class CuttingCounter : BaseCounter, IProgressBar {
             }
         }
     }
+    [ServerRpc(RequireOwnership = false)]
+    private void InteractLogicPlaceObjectToCounterServerRpc() {
+        InteractLogicPlaceObjectToCounterClientRpc();
+    }
 
+    [ClientRpc]
+    private void InteractLogicPlaceObjectToCounterClientRpc() {
+        cuttingProgress = 0;
+
+        OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs {
+            progressNormalized = 0f
+        });
+    }
     public override void InteractAlternate(Player player) {
         if (HasKitchenObject() && IsTheObjectCuttable(GetKitchenObject().GetKitchenObjectSO())) {
-            //ther is kitchen object and alternate key is pressed then cut the object
-            cuttingProgress++;
+            CuttingKitchenObjectServerRpc();
+        }
+    }
 
-            CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOFromInput(GetKitchenObject().GetKitchenObjectSO());
+    [ServerRpc]
+    private void CuttingKitchenObjectServerRpc() {
+        CuttingKitchenObjectClientRpc();
+        TestCuttingProgressDoneServerRpc();
+    }
+    [ClientRpc]
+    private void CuttingKitchenObjectClientRpc() {
+        //ther is kitchen object and alternate key is pressed then cut the object
+        cuttingProgress++;
 
-            OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs {
-                progressNormalized = (float)cuttingProgress / cuttingRecipeSO.maxCutRequiredForObject
-            });
+        CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOFromInput(GetKitchenObject().GetKitchenObjectSO());
+        OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs {
+            progressNormalized = (float)cuttingProgress / cuttingRecipeSO.maxCutRequiredForObject
+        });
 
-            OnCut?.Invoke(this, EventArgs.Empty);
-            OnAnyCut?.Invoke(this, EventArgs.Empty);//for sound
+        OnCut?.Invoke(this, EventArgs.Empty);
+        OnAnyCut?.Invoke(this, EventArgs.Empty);//for sound
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void TestCuttingProgressDoneServerRpc() {
+        CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOFromInput(GetKitchenObject().GetKitchenObjectSO());
 
-            if (cuttingProgress >= cuttingRecipeSO.maxCutRequiredForObject) {
-                KitchenObjectsSO outputKitchenObjectSO = GetKitchenObjectFromInput(GetKitchenObject().GetKitchenObjectSO());
-                //object present
-                GetKitchenObject().DestroySelf();
-                KitchenObject.SpawnKitchenObect(outputKitchenObjectSO, this);
-            }
+        if (cuttingProgress >= cuttingRecipeSO.maxCutRequiredForObject) {
+            KitchenObjectsSO outputKitchenObjectSO = GetKitchenObjectFromInput(GetKitchenObject().GetKitchenObjectSO());
+            //object present
+            KitchenObject.DestroyKitchenObject(GetKitchenObject());
+            KitchenObject.SpawnKitchenObect(outputKitchenObjectSO, this);
         }
     }
     private bool IsTheObjectCuttable(KitchenObjectsSO inputKitchenObjectsSO) {
