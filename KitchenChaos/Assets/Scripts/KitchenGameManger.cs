@@ -126,6 +126,9 @@ public class KitchenGameManger : NetworkBehaviour {
     public bool IsGamePlaying() {
         return state.Value == State.GamePlaying;
     }
+    public bool IsWaitingToStart() {
+        return state.Value == State.WaitingToStart;
+    }
     public bool IsInCountDownState() {
         return state.Value == State.CoolDownToStart;
     }
