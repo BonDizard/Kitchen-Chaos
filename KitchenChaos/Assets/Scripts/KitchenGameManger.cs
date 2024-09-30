@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 public enum State {
     WaitingToStart,
     CoolDownToStart,
@@ -21,6 +22,7 @@ public class KitchenGameManger : NetworkBehaviour {
     public event EventHandler OnMultiPlayerGamePaused;
     public event EventHandler OnMultiPlayerGameUnPaused;
     public event EventHandler OnLocalPlayerReadyChanged;
+    [SerializeField] private Transform playerPrefab;
     private bool localPlayerReady = false;
     public static KitchenGameManger Instance { get; private set; }
     private NetworkVariable<float> countDownToStartTimer = new NetworkVariable<float>(3f);
@@ -32,11 +34,32 @@ public class KitchenGameManger : NetworkBehaviour {
     private Dictionary<ulong, bool> playerReadyDictionary;
     private Dictionary<ulong, bool> playerPausedDictionary;
     private bool autoTestGamePausedState = false;
+    private void Awake() {
+        Instance = this;
+
+        playerReadyDictionary = new Dictionary<ulong, bool>();
+        playerPausedDictionary = new Dictionary<ulong, bool>();
+    }
+    private void Start() {
+        GameInput.Instance.OnPauseButtonClicked += GameInput_OnPauseButtonCLicked;
+        GameInput.Instance.OnInteractionPerformed += GameInput_OnInteractionPerformed;
+    }
     public override void OnNetworkSpawn() {
         state.OnValueChanged += State_OnValueChanged;
         isGamePaused.OnValueChanged += IsGamePaused_OnValueChange;
-        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
+        if (IsServer) {
+            NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
+            NetworkManager.Singleton.SceneManager.OnLoadEventCompleted += NetworkManager_OnLoadEventCompleted;
+        }
     }
+
+    private void NetworkManager_OnLoadEventCompleted(string sceneName, LoadSceneMode loadSceneMode, List<ulong> clientsCompleted, List<ulong> clientsTimedOut) {
+        foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds) {
+            Transform playerTranform = Instantiate(playerPrefab);
+            playerTranform.GetComponent<NetworkObject>().SpawnAsPlayerObject(clientId, true);
+        }
+    }
+
     private void NetworkManager_OnClientDisconnectCallback(ulong clientId) {
         autoTestGamePausedState = true;
     }
@@ -52,14 +75,6 @@ public class KitchenGameManger : NetworkBehaviour {
     }
     private void State_OnValueChanged(State oldState, State newSate) {
         OnStateChanged?.Invoke(this, EventArgs.Empty);
-    }
-    private void Awake() {
-        playerReadyDictionary = new Dictionary<ulong, bool>();
-        Instance = this;
-    }
-    private void Start() {
-        GameInput.Instance.OnPauseButtonClicked += GameInput_OnPauseButtonCLicked;
-        GameInput.Instance.OnInteractionPerformed += GameInput_OnInteractionPerformed;
     }
     private void GameInput_OnInteractionPerformed(object sender, EventArgs e) {
         if (state.Value == State.WaitingToStart) {
