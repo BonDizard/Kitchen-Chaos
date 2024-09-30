@@ -27,6 +27,7 @@ public class Player : NetworkBehaviour, IKitchenObjectParent {
     [SerializeField] private LayerMask collisionLayerMask;
     [SerializeField] private List<Vector2> spawnPositions;
     [SerializeField] private Transform kitchenObjectHoldPoint;
+    [SerializeField] private PlayerVisual playerVisual;
 
     private bool isWalking;
     private Vector3 lastMoveDirection;
@@ -37,7 +38,7 @@ public class Player : NetworkBehaviour, IKitchenObjectParent {
         if (IsOwner) {
             LocalInstance = this;
         }
-        transform.position = spawnPositions[(int)OwnerClientId];
+        transform.position = spawnPositions[KitchenGameMultiplayer.Instance.GetPlayerDataIndexFromClientId(OwnerClientId)];
         OnAnyPlayerSpwaned?.Invoke(this, EventArgs.Empty);
         if (IsServer) {
             NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
@@ -52,6 +53,9 @@ public class Player : NetworkBehaviour, IKitchenObjectParent {
         //subsribe to the events in gameinput and listen to them
         GameInput.Instance.OnInteractionPerformed += GameInput_OnInteractionPerformed;
         GameInput.Instance.OnAlternateInteractionPerformed += GameInput_OnAlternateInteractionPerformed;
+        PlayerData playerData = KitchenGameMultiplayer.Instance.GetPlayerDataFromClientId(OwnerClientId);
+
+        playerVisual.SetPlayerColor(KitchenGameMultiplayer.Instance.GetPlayerColor(playerData.colorId));
     }
 
     private void GameInput_OnAlternateInteractionPerformed(object sender, System.EventArgs e) {

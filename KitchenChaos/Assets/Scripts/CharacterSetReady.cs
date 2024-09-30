@@ -3,6 +3,7 @@
  * Date: 30-09-2024
  * Description: Character ready logic
  */
+using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
@@ -10,6 +11,7 @@ using UnityEngine;
 public class CharacterSetReady : NetworkBehaviour {
     public static CharacterSetReady Instance { get; private set; }
     private Dictionary<ulong, bool> playerReadyDictionary;
+    public event EventHandler OnReadyChanged;
 
     private void Awake() {
         Instance = this;
@@ -20,6 +22,7 @@ public class CharacterSetReady : NetworkBehaviour {
     }
     [ServerRpc(RequireOwnership = false)]
     private void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default) {
+        SetPlayerReadyClientRpc(serverRpcParams.Receive.SenderClientId);
         playerReadyDictionary[serverRpcParams.Receive.SenderClientId] = true;
 
         bool allClientsAreReady = true;
@@ -33,6 +36,16 @@ public class CharacterSetReady : NetworkBehaviour {
         if (allClientsAreReady) {
             Loader.LoadNetwork(Loader.Scene.GameScene);
         }
+    }
+    [ClientRpc]
+    private void SetPlayerReadyClientRpc(ulong clientId) {
+        playerReadyDictionary[clientId] = true;
+
+        OnReadyChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    public bool IsPlayerReady(ulong clientId) {
+        return playerReadyDictionary.ContainsKey(clientId) && playerReadyDictionary[clientId];
     }
 }
 

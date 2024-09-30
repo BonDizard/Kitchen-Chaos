@@ -89,12 +89,9 @@ MonoBehaviour:
   collisionLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  positions:
-  - {x: 2, y: 0}
-  - {x: -2, y: 0}
-  - {x: -2, y: -2}
-  - {x: 2, y: -2}
+  spawnPositions: []
   kitchenObjectHoldPoint: {fileID: 4345060822718564091}
+  playerVisual: {fileID: 5782234287276169245}
 --- !u!114 &7745907643053505730
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,6 +267,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: 8478930023800107981}
+--- !u!114 &5782234287276169245 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8505351619857023620, guid: 1c5dda3c7cd3cf742afcade5419faeab, type: 3}
+  m_PrefabInstance: {fileID: 2753822868485773977}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832847496506521278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b961e53bc3ac43940b7432468430442d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!95 &8478930023800107981 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 6024899996280613204, guid: 1c5dda3c7cd3cf742afcade5419faeab, type: 3}

@@ -10,11 +10,13 @@ using UnityEngine.UI;
 
 public class HostDisconnectedUI : MonoBehaviour {
     [SerializeField] private Button playAgainButton;
-    void Start() {
+    private void Awake() {
         playAgainButton.onClick.AddListener(() => {
             NetworkManager.Singleton.Shutdown();
             Loader.Load(Loader.Scene.MenuScene);
         });
+    }
+    void Start() {
         NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         Hide();
     }
@@ -29,5 +31,8 @@ public class HostDisconnectedUI : MonoBehaviour {
     }
     private void Hide() {
         gameObject.SetActive(false);
+    }
+    private void OnDestroy() {
+        NetworkManager.Singleton.OnClientConnectedCallback -= NetworkManager_OnClientConnectedCallback;
     }
 }
