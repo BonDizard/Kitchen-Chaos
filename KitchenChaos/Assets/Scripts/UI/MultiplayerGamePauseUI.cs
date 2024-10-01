@@ -8,8 +8,8 @@ using UnityEngine;
 
 public class MultiplayerGamePauseUI : MonoBehaviour {
     private void Start() {
-        KitchenGameManger.Instance.OnMultiPlayerGamePaused += KitchenGameManger_OnMultiPlayerGamePaused;
-        KitchenGameManger.Instance.OnMultiPlayerGameUnPaused += KitchenGameManger_OnMultiPlayerGameUnPaused;
+        KitchenGameManger.Instance.OnMultiplayerGamePaused += KitchenGameManger_OnMultiPlayerGamePaused;
+        KitchenGameManger.Instance.OnMultiplayerGameUnpaused += KitchenGameManger_OnMultiPlayerGameUnPaused;
         Hide();
     }
     private void KitchenGameManger_OnMultiPlayerGameUnPaused(object sender, System.EventArgs e) {

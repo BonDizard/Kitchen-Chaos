@@ -9,8 +9,8 @@ using UnityEngine;
 
 public class ConnectingUI : MonoBehaviour {
     private void Start() {
-        KitchenGameMultiplayer.Instance.OnTryingToConnect += KitchenGameMultiplayer_OnTryingToConnect;
-        KitchenGameMultiplayer.Instance.OnFailedToConnect += KitchenGameMultiplayer_OnFailedToConnect;
+        KitchenGameMultiplayer.Instance.OnTryingToJoinGame += KitchenGameMultiplayer_OnTryingToConnect;
+        KitchenGameMultiplayer.Instance.OnFailedToJoinGame += KitchenGameMultiplayer_OnFailedToConnect;
         Hide();
     }
 
@@ -30,7 +30,7 @@ public class ConnectingUI : MonoBehaviour {
         gameObject.SetActive(false);
     }
     private void OnDestroy() {
-        KitchenGameMultiplayer.Instance.OnTryingToConnect -= KitchenGameMultiplayer_OnTryingToConnect;
-        KitchenGameMultiplayer.Instance.OnFailedToConnect -= KitchenGameMultiplayer_OnFailedToConnect;
+        KitchenGameMultiplayer.Instance.OnTryingToJoinGame -= KitchenGameMultiplayer_OnTryingToConnect;
+        KitchenGameMultiplayer.Instance.OnFailedToJoinGame -= KitchenGameMultiplayer_OnFailedToConnect;
     }
 }

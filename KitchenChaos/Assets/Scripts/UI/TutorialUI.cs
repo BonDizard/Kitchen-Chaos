@@ -26,7 +26,7 @@ public class TutorialUI : MonoBehaviour {
         Show();
     }
     private void KitchenGameManger_OnLocalPlayerReadyChanged(object sender, EventArgs e) {
-        if (KitchenGameManger.Instance.GetIfLocalPlayerRedy()) {
+        if (KitchenGameManger.Instance.IsLocalPlayerReady()) {
             Hide();
         }
     }

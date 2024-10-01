@@ -135,7 +135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 7651538976953024426}
-  selctedGameObject: {fileID: 2147959979223930863}
+  selectedGameObject: {fileID: 2147959979223930863}
   colorId: 0
 --- !u!1 &7397646803044688258
 GameObject:

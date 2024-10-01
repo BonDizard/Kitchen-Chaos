@@ -22,7 +22,7 @@ public static class Loader {
         SceneManager.LoadScene(Scene.LoadingScene.ToString());
     }
     public static void LoadNetwork(Scene scene) {
-        NetworkManager.Singleton.SceneManager.LoadScene(Scene.LoadingScene.ToString(), LoadSceneMode.Single);
+        NetworkManager.Singleton.SceneManager.LoadScene(scene.ToString(), LoadSceneMode.Single);
     }
     public static void LoaderCallback() {
         SceneManager.LoadScene(targetScene.ToString());

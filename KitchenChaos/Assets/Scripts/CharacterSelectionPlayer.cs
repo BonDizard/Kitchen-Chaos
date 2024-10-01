@@ -15,12 +15,12 @@ public class CharacterSelectionPlayer : MonoBehaviour {
     [SerializeField] private Button kickButton;
     private void Awake() {
         kickButton.onClick.AddListener(() => {
-            PlayerData playerData = KitchenGameMultiplayer.Instance.GetPlayerDataFromIndex(playerIndex);
+            PlayerData playerData = KitchenGameMultiplayer.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
             KitchenGameMultiplayer.Instance.KickPlayer(playerData.clientId);
         });
     }
     private void Start() {
-        KitchenGameMultiplayer.Instance.OnPlayerListChanged += KitchenGameMultiplayer_OnPlayerListChanged;
+        KitchenGameMultiplayer.Instance.OnPlayerDataNetworkListChanged += KitchenGameMultiplayer_OnPlayerListChanged;
         CharacterSetReady.Instance.OnReadyChanged += CharacterSetReady_OnReadyChanged;
 
         kickButton.gameObject.SetActive(NetworkManager.Singleton.IsServer);
@@ -34,7 +34,7 @@ public class CharacterSelectionPlayer : MonoBehaviour {
     private void UpdatePlayer() {
         if (KitchenGameMultiplayer.Instance.IsPlayerIndexConnected(playerIndex)) {
             Show();
-            PlayerData playerData = KitchenGameMultiplayer.Instance.GetPlayerDataFromIndex(playerIndex);
+            PlayerData playerData = KitchenGameMultiplayer.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
             readyGameObject.SetActive(CharacterSetReady.Instance.IsPlayerReady(playerData.clientId));
             playerVisual.SetPlayerColor(KitchenGameMultiplayer.Instance.GetPlayerColor(playerData.colorId));
 
@@ -54,6 +54,6 @@ public class CharacterSelectionPlayer : MonoBehaviour {
         gameObject.SetActive(true);
     }
     private void OnDestroy() {
-        KitchenGameMultiplayer.Instance.OnPlayerListChanged -= KitchenGameMultiplayer_OnPlayerListChanged;
+        KitchenGameMultiplayer.Instance.OnPlayerDataNetworkListChanged -= KitchenGameMultiplayer_OnPlayerListChanged;
     }
 }

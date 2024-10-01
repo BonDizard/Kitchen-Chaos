@@ -16,7 +16,7 @@ public class ConnectionResponseTextUI : MonoBehaviour {
         closeButton.onClick.AddListener(Hide);
     }
     private void Start() {
-        KitchenGameMultiplayer.Instance.OnFailedToConnect += KitchenGameMultiplayer_OnFailedToConnect;
+        KitchenGameMultiplayer.Instance.OnFailedToJoinGame += KitchenGameMultiplayer_OnFailedToConnect;
         Hide();
     }
 
@@ -36,6 +36,6 @@ public class ConnectionResponseTextUI : MonoBehaviour {
         gameObject.SetActive(false);
     }
     private void OnDestroy() {
-        KitchenGameMultiplayer.Instance.OnFailedToConnect -= KitchenGameMultiplayer_OnFailedToConnect;
+        KitchenGameMultiplayer.Instance.OnFailedToJoinGame -= KitchenGameMultiplayer_OnFailedToConnect;
     }
 }

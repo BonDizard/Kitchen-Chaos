@@ -17,7 +17,7 @@ public class CharacterSelectColorSingleUI : MonoBehaviour {
         });
     }
     private void Start() {
-        KitchenGameMultiplayer.Instance.OnPlayerListChanged += KitchenGameMultiplayer_OnPlayerListChanged;
+        KitchenGameMultiplayer.Instance.OnPlayerDataNetworkListChanged += KitchenGameMultiplayer_OnPlayerListChanged;
         image.color = KitchenGameMultiplayer.Instance.GetPlayerColor(colorId);
         UpdateIsSelected();
     }
@@ -35,6 +35,6 @@ public class CharacterSelectColorSingleUI : MonoBehaviour {
         }
     }
     private void OnDestroy() {
-        KitchenGameMultiplayer.Instance.OnPlayerListChanged -= KitchenGameMultiplayer_OnPlayerListChanged;
+        KitchenGameMultiplayer.Instance.OnPlayerDataNetworkListChanged -= KitchenGameMultiplayer_OnPlayerListChanged;
     }
 }

@@ -89,7 +89,11 @@ MonoBehaviour:
   collisionLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  spawnPositions: []
+  spawnPositions:
+  - {x: 2, y: 0}
+  - {x: -2, y: 0}
+  - {x: -2, y: -2}
+  - {x: 2, y: -2}
   kitchenObjectHoldPoint: {fileID: 4345060822718564091}
   playerVisual: {fileID: 5782234287276169245}
 --- !u!114 &7745907643053505730
