@@ -1,7 +1,7 @@
 /*
  * Author: Bharath Kumar S
  * Date: 29-09-2024
- * Description: Game Manger 
+ * Description: UI to show ehn Host discoonected Manger 
  */
 
 using Unity.Netcode;
@@ -17,10 +17,10 @@ public class HostDisconnectedUI : MonoBehaviour {
         });
     }
     void Start() {
-        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
+        NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
         Hide();
     }
-    private void NetworkManager_OnClientConnectedCallback(ulong clientId) {
+    private void NetworkManager_OnClientDisconnectCallback(ulong clientId) {
         if (clientId == NetworkManager.ServerClientId) {
             //server shutting down
             Show();
@@ -33,6 +33,6 @@ public class HostDisconnectedUI : MonoBehaviour {
         gameObject.SetActive(false);
     }
     private void OnDestroy() {
-        // NetworkManager.Singleton.OnClientConnectedCallback -= NetworkManager_OnClientConnectedCallback;
+        NetworkManager.Singleton.OnClientDisconnectCallback -= NetworkManager_OnClientDisconnectCallback;
     }
 }
