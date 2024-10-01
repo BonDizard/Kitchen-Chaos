@@ -227,6 +227,7 @@ GameObject:
   - component: {fileID: 5717279409531219140}
   - component: {fileID: 4607394753853853510}
   - component: {fileID: 4176255871129281300}
+  - component: {fileID: 8936978069162703743}
   m_Layer: 5
   m_Name: DeliverResultUI
   m_TagString: Untagged
@@ -359,6 +360,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!225 &8936978069162703743
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4029450873637383581}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &4196905451807400224
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,6 +641,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1282383499382334735, guid: 09c6293abc1f7ed42a9f163977c558cb, type: 3}
+      propertyPath: GlobalObjectIdHash
+      value: 951099334
+      objectReference: {fileID: 0}
     - target: {fileID: 4213928019269650126, guid: 09c6293abc1f7ed42a9f163977c558cb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
