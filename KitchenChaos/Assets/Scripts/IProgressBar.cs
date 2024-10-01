@@ -5,7 +5,7 @@
  */
 using System;
 
-public interface IProgressBar {
+public interface IHasProgress {
 
     public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
 

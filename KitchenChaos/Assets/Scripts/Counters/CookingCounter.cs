@@ -7,7 +7,7 @@
 using System;
 using Unity.Netcode;
 using UnityEngine;
-public class CookingCounter : BaseCounter, IProgressBar {
+public class CookingCounter : BaseCounter, IHasProgress {
     public enum State {
         Idle,
         Frying,
@@ -15,7 +15,7 @@ public class CookingCounter : BaseCounter, IProgressBar {
         Burnt,
     }
 
-    public event EventHandler<IProgressBar.OnProgressChangedEventArgs> OnProgressChanged;
+    public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
     public event EventHandler<OnStateChangeEventArgs> OnStateChange;
     public class OnStateChangeEventArgs {
         public State state;
@@ -36,13 +36,13 @@ public class CookingCounter : BaseCounter, IProgressBar {
 
     private void BuringTime_OnValueCahanged(float oldValue, float newvalue) {
         float burningTimeMax = burningRecipeSO != null ? burningRecipeSO.maxBurningTime : 1f;
-        OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs {
+        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs {
             progressNormalized = burningTimer.Value / burningTimeMax
         });
     }
     private void FryingTime_OnValueCahanged(float oldValue, float newvalue) {
         float fryingTimeMax = cookingRecipeSO != null ? cookingRecipeSO.maxCookingTime : 1f;
-        OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs {
+        OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs {
             progressNormalized = fryingTimer.Value / fryingTimeMax
         });
     }
@@ -52,7 +52,7 @@ public class CookingCounter : BaseCounter, IProgressBar {
         });
         //dont show progress bar
         if (state.Value == State.Idle || state.Value == State.Burnt) {
-            OnProgressChanged?.Invoke(this, new IProgressBar.OnProgressChangedEventArgs {
+            OnProgressChanged?.Invoke(this, new IHasProgress.OnProgressChangedEventArgs {
                 progressNormalized = 0f
             });
         }
@@ -143,12 +143,9 @@ public class CookingCounter : BaseCounter, IProgressBar {
     }
     [ServerRpc(RequireOwnership = false)]
     private void SetStateIdleServerRpc() {
-        SetStateIdleClientRpc();
-    }
-    [ClientRpc]
-    private void SetStateIdleClientRpc() {
         state.Value = State.Idle;
     }
+
     [ServerRpc(RequireOwnership = false)]
     private void InteractLogicPlaceObjectOnCounterServerRpc(int kitchenObjectSOsIndex) {
         fryingTimer.Value = 0f;

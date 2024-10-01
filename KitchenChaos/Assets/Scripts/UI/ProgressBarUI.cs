@@ -9,9 +9,9 @@ using UnityEngine.UI;
 public class ProgressBarUI : MonoBehaviour {
     [SerializeField] Image barImage;
     [SerializeField] GameObject hasProgressGameObject;
-    private IProgressBar hasProgress;
+    private IHasProgress hasProgress;
     private void Start() {
-        hasProgress = hasProgressGameObject.GetComponent<IProgressBar>();
+        hasProgress = hasProgressGameObject.GetComponent<IHasProgress>();
 
         if (hasProgress == null) {
             Debug.LogError("Game Object " + hasProgressGameObject + " Does not have the IProgressBar");
@@ -21,7 +21,7 @@ public class ProgressBarUI : MonoBehaviour {
         Hide();
     }
 
-    private void IProgressBar_OnProgressChanged(object sender, IProgressBar.OnProgressChangedEventArgs e) {
+    private void IProgressBar_OnProgressChanged(object sender, IHasProgress.OnProgressChangedEventArgs e) {
         barImage.fillAmount = e.progressNormalized;
         //if bar is full or empty hide
         if (e.progressNormalized == 0f || e.progressNormalized == 1f) {

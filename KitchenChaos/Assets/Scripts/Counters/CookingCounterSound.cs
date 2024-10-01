@@ -26,7 +26,7 @@ public class CookingCounterSound : MonoBehaviour {
             audioSource.Pause();
         }
     }
-    private void CookingCounter_OnProgressChanged(object sender, IProgressBar.OnProgressChangedEventArgs e) {
+    private void CookingCounter_OnProgressChanged(object sender, IHasProgress.OnProgressChangedEventArgs e) {
         float burnShowProgress = 0.5f;
         playWarningSound = cookingCounter.IsFried() && e.progressNormalized >= burnShowProgress;
     }

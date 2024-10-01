@@ -17,7 +17,7 @@ public class ProgressBarFlashingAnimation : MonoBehaviour {
         animator.SetBool(IS_FLASHING, false);
     }
 
-    private void CookingCounter_OnProgressChanged(object sender, IProgressBar.OnProgressChangedEventArgs e) {
+    private void CookingCounter_OnProgressChanged(object sender, IHasProgress.OnProgressChangedEventArgs e) {
         float burnShowProgress = 0.5f;
         bool show = cookingCounter.IsFried() && e.progressNormalized >= burnShowProgress;
         if (show) {
