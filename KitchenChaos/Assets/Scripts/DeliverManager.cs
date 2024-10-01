@@ -10,12 +10,13 @@ using UnityEngine;
 
 public class DeliverManager : NetworkBehaviour {
     public static DeliverManager Instance { get; private set; }
+
     public event EventHandler OnRecipeSpawned;
     public event EventHandler OnRecipeCompleted;
     public event EventHandler OnRecipeSucess;
     public event EventHandler OnRecipeFailed;
 
-    public RecipeListSO menu;
+    [SerializeField] private RecipeListSO menu;
     private List<RecipeSO> waitingRecipeSOList;
     //dont want to spawn imediatly
     private float spawnRecipeTimer = 4f;
@@ -69,7 +70,7 @@ public class DeliverManager : NetworkBehaviour {
             // Debug.Log("Plate ingredient count: " + plateIngredientCount + ", Recipe ingredient count: " + recipeIngredientCount);
 
             if (plateIngredientCount == recipeIngredientCount) {
-                bool orderMatch = true;
+                bool plateContentsMatchesRecipe = true;
 
                 // Loop through each ingredient in the plate
                 foreach (KitchenObjectsSO plateKitchenObjectsSO in plateKitchenObject.GetKitchenObjectsSOList()) {
@@ -91,13 +92,13 @@ public class DeliverManager : NetworkBehaviour {
 
                     if (!ingredientFound) {
                         // Debug.LogWarning("Ingredient not found in recipe: " + plateKitchenObjectsSO.name);
-                        orderMatch = false;
+                        plateContentsMatchesRecipe = false;
                         break;
                     }
                 }
 
                 // If all ingredients matched, complete the order
-                if (orderMatch) {
+                if (plateContentsMatchesRecipe) {
                     DeliverCorrectRecipeServerRpc(i);
                     return;
                 }
