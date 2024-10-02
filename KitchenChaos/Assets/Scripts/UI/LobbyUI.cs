@@ -4,7 +4,9 @@
  * Description: join and create lobby UI
  */
 
+using System.Collections.Generic;
 using TMPro;
+using Unity.Services.Lobbies.Models;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -16,6 +18,8 @@ public class LobbyUI : MonoBehaviour {
     [SerializeField] private Button joinCodeButton;
     [SerializeField] private TMP_InputField lobbyCodeField;
     [SerializeField] private TMP_InputField playerNameField;
+    [SerializeField] private Transform lobbyListContainer;
+    [SerializeField] private Transform lobbyTemplate;
     private void Awake() {
         quickJoinButton.onClick.AddListener(() => {
             KitchenGameLobby.Instance.QuickJoin();
@@ -24,11 +28,13 @@ public class LobbyUI : MonoBehaviour {
             createLobbyUIGameObject.Show();
         });
         mainMenuButton.onClick.AddListener(() => {
+            KitchenGameLobby.Instance.LeaveLobby();
             Loader.Load(Loader.Scene.MenuScene);
         });
         joinCodeButton.onClick.AddListener(() => {
             KitchenGameLobby.Instance.JoinWithCode(lobbyCodeField.text);
         });
+        lobbyTemplate.gameObject.SetActive(false);
     }
 
     private void Start() {
@@ -36,6 +42,26 @@ public class LobbyUI : MonoBehaviour {
         playerNameField.onValueChanged.AddListener((string newText) => {
             KitchenGameMultiplayer.Instance.SetPlayerName(newText);
         });
+        KitchenGameLobby.Instance.OnLobbyListChanged += KitchenGameLobby_OnLobbyListChanged;
+        UpdateLobbyList(new List<Lobby>());
+    }
+
+    private void KitchenGameLobby_OnLobbyListChanged(object sender, KitchenGameLobby.OnLobbyListChnagedEventArgs e) {
+        UpdateLobbyList(e.lobbyList);
+    }
+
+    private void UpdateLobbyList(List<Lobby> lobbyList) {
+        //clean up 
+        foreach (Transform child in lobbyListContainer) {
+            if (child == lobbyTemplate) continue;
+            Destroy(child.gameObject);
+        }
+        foreach (Lobby lobby in lobbyList) {
+            Transform lobbyTransform = Instantiate(lobbyTemplate, lobbyListContainer);
+            lobbyTransform.gameObject.SetActive(true);
+
+            lobbyTransform.GetComponent<LobbyListSingleUI>().SetLobby(lobby);
+        }
     }
 
 }

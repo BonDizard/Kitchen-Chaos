@@ -6,6 +6,7 @@
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
+using Unity.Services.Authentication;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -75,6 +76,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour {
             colorId = GetFirstUnusedColorId(),
         });
         SetPlayerNameServerRpc(GetPlayerName());
+        SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
         Debug.Log("[DEBUG_KGM] Added player data for clientId: " + clientId);
     }
 
@@ -108,12 +110,20 @@ public class KitchenGameMultiplayer : NetworkBehaviour {
     }
     public void NetworkManager_Client_OnClientConnectedCallback(ulong clientId) {
         SetPlayerNameServerRpc(GetPlayerName());
+        SetPlayerIdServerRpc(AuthenticationService.Instance.PlayerId);
     }
     [ServerRpc(RequireOwnership = false)]
     private void SetPlayerNameServerRpc(string playerName, ServerRpcParams serverRpcParams = default) {
         int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
         PlayerData playerData = GetPlayerDataFromPlayerIndex(playerDataIndex);
         playerData.playerName = playerName;
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerIdServerRpc(string playerId, ServerRpcParams serverRpcParams = default) {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        PlayerData playerData = GetPlayerDataFromPlayerIndex(playerDataIndex);
+        playerData.playerId = playerId;
         playerDataNetworkList[playerDataIndex] = playerData;
     }
     private void NetworkManager_Client_OnClientDisconnectCallback(ulong clientId) {

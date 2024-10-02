@@ -17,10 +17,10 @@ public class CreateLobbyUI : MonoBehaviour {
         closeButton.onClick.AddListener(() => {
             Hide();
         });
-        createPrivateButton.onClick.AddListener(() => {
+        createPublicButton.onClick.AddListener(() => {
             KitchenGameLobby.Instance.CreatLobby(lobbyNameField.text, false);
         });
-        createPublicButton.onClick.AddListener(() => {
+        createPrivateButton.onClick.AddListener(() => {
             KitchenGameLobby.Instance.CreatLobby(lobbyNameField.text, true);
         });
     }
