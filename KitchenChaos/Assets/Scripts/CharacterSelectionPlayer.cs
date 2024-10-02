@@ -4,6 +4,7 @@
  * Description: Character Selection Logic
  */
 using System;
+using TMPro;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +14,7 @@ public class CharacterSelectionPlayer : MonoBehaviour {
     [SerializeField] private GameObject readyGameObject;
     [SerializeField] private PlayerVisual playerVisual;
     [SerializeField] private Button kickButton;
+    [SerializeField] private TextMeshPro playerName;
     private void Awake() {
         kickButton.onClick.AddListener(() => {
             PlayerData playerData = KitchenGameMultiplayer.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
@@ -37,7 +39,7 @@ public class CharacterSelectionPlayer : MonoBehaviour {
             PlayerData playerData = KitchenGameMultiplayer.Instance.GetPlayerDataFromPlayerIndex(playerIndex);
             readyGameObject.SetActive(CharacterSetReady.Instance.IsPlayerReady(playerData.clientId));
             playerVisual.SetPlayerColor(KitchenGameMultiplayer.Instance.GetPlayerColor(playerData.colorId));
-
+            playerName.text = playerData.playerName.ToString();
         }
         else {
             Hide();

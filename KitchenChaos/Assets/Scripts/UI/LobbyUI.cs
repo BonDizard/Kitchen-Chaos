@@ -15,6 +15,7 @@ public class LobbyUI : MonoBehaviour {
     [SerializeField] private CreateLobbyUI createLobbyUIGameObject;
     [SerializeField] private Button joinCodeButton;
     [SerializeField] private TMP_InputField lobbyCodeField;
+    [SerializeField] private TMP_InputField playerNameField;
     private void Awake() {
         quickJoinButton.onClick.AddListener(() => {
             KitchenGameLobby.Instance.QuickJoin();
@@ -27,6 +28,13 @@ public class LobbyUI : MonoBehaviour {
         });
         joinCodeButton.onClick.AddListener(() => {
             KitchenGameLobby.Instance.JoinWithCode(lobbyCodeField.text);
+        });
+    }
+
+    private void Start() {
+        playerNameField.text = KitchenGameMultiplayer.Instance.GetPlayerName();
+        playerNameField.onValueChanged.AddListener((string newText) => {
+            KitchenGameMultiplayer.Instance.SetPlayerName(newText);
         });
     }
 

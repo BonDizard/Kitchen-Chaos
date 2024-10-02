@@ -12,6 +12,7 @@ using UnityEngine;
 public class KitchenGameLobby : MonoBehaviour {
     public static KitchenGameLobby Instance { get; private set; }
     private Lobby joinedLobby;
+    private float heartBeatTimer;
     private void Awake() {
         Instance = this;
         DontDestroyOnLoad(gameObject);
@@ -40,6 +41,23 @@ public class KitchenGameLobby : MonoBehaviour {
         catch (LobbyServiceException e) {
             Debug.Log(e);
         }
+    }
+    private void Update() {
+        HandleHeartBeat();
+    }
+    private void HandleHeartBeat() {
+        if (IsLobbyHost()) {
+            heartBeatTimer -= Time.deltaTime;
+            if (heartBeatTimer < 0f) {
+                float heartBeatTimerMax = 15f;
+                heartBeatTimer = heartBeatTimerMax;
+
+                LobbyService.Instance.SendHeartbeatPingAsync(joinedLobby.Id);
+            }
+        }
+    }
+    public bool IsLobbyHost() {
+        return joinedLobby != null && joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
     }
     public async void QuickJoin() {
         try {

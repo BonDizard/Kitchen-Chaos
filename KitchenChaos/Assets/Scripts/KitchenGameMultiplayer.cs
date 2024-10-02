@@ -12,7 +12,7 @@ using UnityEngine.SceneManagement;
 public class KitchenGameMultiplayer : NetworkBehaviour {
 
     public const int MAX_PLAYERS_ALLOWED = 4;
-
+    private const string PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER = "PlayerNameMultiPlayer";
     public static KitchenGameMultiplayer Instance { get; private set; }
 
     public event EventHandler OnTryingToJoinGame;
@@ -24,6 +24,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour {
 
 
     private NetworkList<PlayerData> playerDataNetworkList;
+    private string playerName;
 
     private void Awake() {
         Debug.Log("[DEBUG_KGM] Awake called - Initializing KitchenGameMultiplayer");
@@ -33,9 +34,17 @@ public class KitchenGameMultiplayer : NetworkBehaviour {
         playerDataNetworkList = new NetworkList<PlayerData>();
         playerDataNetworkList.OnListChanged += playerDataNetworkList_OnListChanged;
 
+        playerName = PlayerPrefs.GetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, "PlayerName" + UnityEngine.Random.Range(100, 1000));
+
         Debug.Log("[DEBUG_KGM] NetworkList initialized with PlayerData");
     }
-
+    public string GetPlayerName() {
+        return playerName;
+    }
+    public void SetPlayerName(string playerName) {
+        this.playerName = playerName;
+        PlayerPrefs.SetString(PLAYER_PREFS_PLAYER_NAME_MULTIPLAYER, playerName);
+    }
     private void playerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent) {
         Debug.Log("[DEBUG_KGM] playerDataNetworkList_OnListChanged triggered: " + changeEvent + ", Element: " + changeEvent.Value);
         OnPlayerDataNetworkListChanged?.Invoke(this, EventArgs.Empty);
@@ -65,6 +74,7 @@ public class KitchenGameMultiplayer : NetworkBehaviour {
             clientId = clientId,
             colorId = GetFirstUnusedColorId(),
         });
+        SetPlayerNameServerRpc(GetPlayerName());
         Debug.Log("[DEBUG_KGM] Added player data for clientId: " + clientId);
     }
 
@@ -92,9 +102,20 @@ public class KitchenGameMultiplayer : NetworkBehaviour {
         OnTryingToJoinGame?.Invoke(this, EventArgs.Empty);
 
         NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_Client_OnClientDisconnectCallback;
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_Client_OnClientConnectedCallback;
+
         NetworkManager.Singleton.StartClient();
     }
-
+    public void NetworkManager_Client_OnClientConnectedCallback(ulong clientId) {
+        SetPlayerNameServerRpc(GetPlayerName());
+    }
+    [ServerRpc(RequireOwnership = false)]
+    private void SetPlayerNameServerRpc(string playerName, ServerRpcParams serverRpcParams = default) {
+        int playerDataIndex = GetPlayerDataIndexFromClientId(serverRpcParams.Receive.SenderClientId);
+        PlayerData playerData = GetPlayerDataFromPlayerIndex(playerDataIndex);
+        playerData.playerName = playerName;
+        playerDataNetworkList[playerDataIndex] = playerData;
+    }
     private void NetworkManager_Client_OnClientDisconnectCallback(ulong clientId) {
         Debug.Log("[DEBUG_KGM] Client failed to join or disconnected: " + clientId);
         OnFailedToJoinGame?.Invoke(this, EventArgs.Empty);
