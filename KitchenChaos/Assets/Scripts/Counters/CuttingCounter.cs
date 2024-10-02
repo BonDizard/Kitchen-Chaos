@@ -90,7 +90,9 @@ public class CuttingCounter : BaseCounter, IHasProgress {
     [ServerRpc(RequireOwnership = false)]
     private void CuttingKitchenObjectServerRpc() {
         Debug.Log("[CuttingCounter] Cutting object (Server RPC).");
-        CuttingKitchenObjectClientRpc();
+        if (HasKitchenObject() && IsTheObjectCuttable(GetKitchenObject().GetKitchenObjectSO())) {
+            CuttingKitchenObjectClientRpc();
+        }
     }
 
     [ClientRpc]
@@ -114,14 +116,16 @@ public class CuttingCounter : BaseCounter, IHasProgress {
 
     [ServerRpc(RequireOwnership = false)]
     private void TestCuttingProgressDoneServerRpc() {
-        CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOFromInput(GetKitchenObject().GetKitchenObjectSO());
+        if (HasKitchenObject() && IsTheObjectCuttable(GetKitchenObject().GetKitchenObjectSO())) {
+            CuttingRecipeSO cuttingRecipeSO = GetCuttingRecipeSOFromInput(GetKitchenObject().GetKitchenObjectSO());
 
-        if (cuttingProgress >= cuttingRecipeSO.maxCutRequiredForObject) {
-            Debug.Log("[CuttingCounter] Cutting progress done. Transforming object.");
-            KitchenObjectsSO outputKitchenObjectSO = GetKitchenObjectFromInput(GetKitchenObject().GetKitchenObjectSO());
-            // Object is done being cut
-            KitchenObject.DestroyKitchenObject(GetKitchenObject());
-            KitchenObject.SpawnKitchenObect(outputKitchenObjectSO, this);
+            if (cuttingProgress >= cuttingRecipeSO.maxCutRequiredForObject) {
+                Debug.Log("[CuttingCounter] Cutting progress done. Transforming object.");
+                KitchenObjectsSO outputKitchenObjectSO = GetKitchenObjectFromInput(GetKitchenObject().GetKitchenObjectSO());
+                // Object is done being cut
+                KitchenObject.DestroyKitchenObject(GetKitchenObject());
+                KitchenObject.SpawnKitchenObect(outputKitchenObjectSO, this);
+            }
         }
     }
 
