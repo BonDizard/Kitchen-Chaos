@@ -108,13 +108,19 @@ public class KitchenGameManger : NetworkBehaviour {
 
     [ServerRpc(RequireOwnership = false)]
     private void SetPlayerReadyServerRpc(ServerRpcParams serverRpcParams = default) {
-        Debug.Log("[KitchenGameManager] Player ready: " + serverRpcParams.Receive.SenderClientId);
-        playerReadyDictionary[serverRpcParams.Receive.SenderClientId] = true;
+        ulong senderClientId = serverRpcParams.Receive.SenderClientId;
+
+        if (!playerReadyDictionary.ContainsKey(senderClientId)) {
+            playerReadyDictionary[senderClientId] = false; // Default initialization
+            Debug.LogWarning("[KitchenGameManager] Adding default entry for playerReadyDictionary for client: " + senderClientId);
+        }
+
+        playerReadyDictionary[senderClientId] = true;
+        Debug.Log("[KitchenGameManager] Player ready: " + senderClientId);
 
         bool allClientsAreReady = true;
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds) {
             if (!playerReadyDictionary.ContainsKey(clientId) || !playerReadyDictionary[clientId]) {
-                //some player not ready
                 allClientsAreReady = false;
                 break;
             }
@@ -125,6 +131,7 @@ public class KitchenGameManger : NetworkBehaviour {
             state.Value = State.CoolDownToStart;
         }
     }
+
 
     private void GameInput_OnPauseButtonCLicked(object sender, EventArgs e) {
         Debug.Log("[KitchenGameManager] Pause button clicked.");
@@ -212,17 +219,32 @@ public class KitchenGameManger : NetworkBehaviour {
 
     [ServerRpc(RequireOwnership = false)]
     private void PauseGameServerRpc(ServerRpcParams serverRpcParams = default) {
-        Debug.Log("[KitchenGameManager] Player " + serverRpcParams.Receive.SenderClientId + " paused the game.");
-        playerPausedDictionary[serverRpcParams.Receive.SenderClientId] = true;
+        ulong senderClientId = serverRpcParams.Receive.SenderClientId;
+
+        if (!playerPausedDictionary.ContainsKey(senderClientId)) {
+            playerPausedDictionary[senderClientId] = false; // Default initialization
+            Debug.LogWarning("[KitchenGameManager] Adding default entry for playerPausedDictionary for client: " + senderClientId);
+        }
+
+        playerPausedDictionary[senderClientId] = true;
+        Debug.Log("[KitchenGameManager] Player " + senderClientId + " paused the game.");
         TestGamePausedState();
     }
 
     [ServerRpc(RequireOwnership = false)]
     private void UnPauseGameServerRpc(ServerRpcParams serverRpcParams = default) {
-        Debug.Log("[KitchenGameManager] Player " + serverRpcParams.Receive.SenderClientId + " unpaused the game.");
-        playerPausedDictionary[serverRpcParams.Receive.SenderClientId] = false;
+        ulong senderClientId = serverRpcParams.Receive.SenderClientId;
+
+        if (!playerPausedDictionary.ContainsKey(senderClientId)) {
+            playerPausedDictionary[senderClientId] = false; // Default initialization
+            Debug.LogWarning("[KitchenGameManager] Adding default entry for playerPausedDictionary for client: " + senderClientId);
+        }
+
+        playerPausedDictionary[senderClientId] = false;
+        Debug.Log("[KitchenGameManager] Player " + senderClientId + " unpaused the game.");
         TestGamePausedState();
     }
+
 
     private void TestGamePausedState() {
         foreach (ulong clientId in NetworkManager.Singleton.ConnectedClientsIds) {
